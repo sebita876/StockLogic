@@ -1,3 +1,4 @@
+
 .fondo {
 
   position: fixed;
@@ -5,12 +6,19 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../../public/fondo.jpg');
+  background: #00866dff;
+  background: rgb(0, 134, 109);
   background-size: cover;
-  filter: blur(8px);
   z-index: -1;
 }
+.fotoStock{
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url('../../public/Adox.png');
+  width: 200px;
+  height: 90px;
 
+}
 .fondo2 {
   position: fixed;
   top: 0;
@@ -27,7 +35,7 @@
   left: 0;
   width: 440px;
   height: 320px;
-  background-image: url('../../public/Adox.jpg');
+  background-image: url('../../public/Adox.png');
   background-size: contain;
   background-repeat: no-repeat;
   z-index: 1;
@@ -39,13 +47,11 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: linear-gradient(#69000e, #6b2b33);
-  height: 460px;
+  background: #FFFFFF;  height: 460px;
   width: 350px;
   border-radius: 10px;
-  -webkit-box-shadow: -12px 13px 11px 4px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: -12px 13px 11px 4px rgba(0, 0, 0, 0.75);
-  box-shadow: -12px 13px 11px 4px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -54,24 +60,21 @@
 }
 
 .inputTextLogin {
-  height: 30px;
-  width: 180px;
-  margin: 10% auto 10px;
-  display: block;
-  align-items: center;
-  border: 3px solid black;
-  background: linear-gradient(45deg, black, gray);
-  background-size: 200% 100%;
-  transition: background-position 0.3s cubic-bezier(0.1, 0, 0.1, 1);
-  border-radius: 100px;
-  color: white;
-  text-align: center;
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #c9c7c7;
+  width: 200px;
+  border: 0;
+  margin-bottom: 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
 }
 
 .inputTextLogin::placeholder {
   text-align: center;
   color: white;
-  Font-family: Consolas, monaco, monospace;
+  font-family: "Roboto", sans-serif;
 }
 
 .inputTextLogin:hover {
@@ -93,15 +96,6 @@
   font-size: 15px;
 }
 
-.inputTextRegister::placeholder {
-  text-align: center;
-  color: white;
-  Font-family: Consolas, monaco, monospace;
-}
-
-.inputTextRegister:hover {
-  background-position: 100% 0;
-}
 
 .divFoto {
   margin: 20% auto 30px;
@@ -529,6 +523,19 @@ w .modal-content button {
   color: rgb(0, 0, 0);
   cursor: default;
 }
+.lista2 {
+  background-size: contain;
+  border-color: rgb(22, 1, 4);
+  margin-left: 0;
+  width: auto;
+  min-width: 155px;
+  height: 25px;
+  text-align: center;
+  font-family: Consolas, monaco, monospace;
+  font-size: 18px;
+  color: rgb(0, 0, 0);
+  cursor: default;
+}
 
 .resto table {
   border-collapse: collapse;
@@ -662,20 +669,24 @@ option {
 }
 
 .botom {
+  margin-top: 10px;
   border-radius: 20px;
-  margin-top: 6%;
-  background: linear-gradient(45deg, rgb(43, 4, 4), rgb(167, 17, 17));
-  border: 1px solid #160104;
-  color: white;
-  padding: 7.5px 16px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  Font-family: Consolas, monaco, monospace;
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #00866dff;
+  width: 200px;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
 }
 
 .botom:hover {
-  background: linear-gradient(50deg, rgb(148, 14, 14), rgb(236, 41, 41));
+  background: #03AB8B;
 
   -webkit-box-shadow: 0px 10px 30px 0px rgb(54, 5, 5);
   -moz-box-shadow: 0px 10px 30px 0px rgb(56, 8, 8);
@@ -697,8 +708,9 @@ option {
 }
 
 .text {
+  margin-top: 0;
   text-align: center;
-  Font-family: Consolas, monaco, monospace;
+  font-family: "Roboto", sans-serif;
   font-size: x-large;
 }
 

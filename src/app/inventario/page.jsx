@@ -9,6 +9,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Loading from "./loading";
 
 export default function Inventario() {
+  const[listaPrestamos,setListaPrestamos] = useState([])
   const [mostarLista, setMostarList] = useState(false)
   const [articulos, setArticulos] = useState([])
   const [isLoading, setIsLoading] = useState(true);
@@ -86,6 +87,13 @@ export default function Inventario() {
   const closeModal3 = () => {
     setModalOpen3(false)
   }
+  const [modalOpen9, setModalOpen9] = useState(false)
+  const openModal9 = () => {
+    setModalOpen9(true)
+  }
+  const closeModal9 = () => {
+    setModalOpen9(false)
+  }
   const [modalOpen4, setModalOpen4] = useState(false)
   const openModal4 = () => {
     setModalOpen4(!modalOpen4)
@@ -136,13 +144,7 @@ export default function Inventario() {
   const closeModal7 = () => {
     setModalOpen7(false)
   }
-  const [modalOpen8, setModalOpen8] = useState(false)
-  const openModal8 = () => {
-    setModalOpen8(true)
-  }
-  const closeModal8 = () => {
-    setModalOpen8(false)
-  }
+  const [mostrarPrestamo, setMostrarPrestamo] = useState(false)
   const [modalOpenAyuda, setModalOpenAyuda] = useState(false)
   const openModalAyuda = () => {
     setModalOpenAyuda(!modalOpenAyuda)
@@ -216,8 +218,8 @@ export default function Inventario() {
             fecha={dato.fecha}
             id={dato.id}
             categoria={dato.categoria}
-            cantidad={dato.cantidad} 
-            tema={tema}/>))
+            cantidad={dato.cantidad}
+            tema={tema} />))
         setListaArticulo([...listaArticulo, ...newComponent])
       })
     } catch (error) {
@@ -236,6 +238,13 @@ export default function Inventario() {
     } catch {
       document.getElementById("H1 hidden").hidden = true
       document.getElementById("H2 hidden").hidden = false
+    }
+  }
+  const SeleccionarArticulo2 = () => {
+    try {
+      const resultado = articulos.find(element => element.nombre === document.getElementById("select").value)
+
+    } catch {
     }
   }
   const ActualizarArticulo = async () => {
@@ -263,8 +272,8 @@ export default function Inventario() {
           fecha={funcion()}
           id={id}
           categoria={categoria}
-          cantidad={cantidad} 
-          tema={tema}/>
+          cantidad={cantidad}
+          tema={tema} />
         copia[indice] = componente
         setListaArticulo(copia)
         closeModal6()
@@ -436,6 +445,7 @@ export default function Inventario() {
       setMostarList(false)
     } else {
       setMostarList(true)
+      setMostrarPrestamo(false)
     }
   }
   const filtrarAZ = () => {
@@ -546,11 +556,27 @@ export default function Inventario() {
                 <button className="botonto" onClick={ActualizarArticulo}>Actualizar</button>
               </div>
             </div>)}
-          {modalOpen8 && (
+          {modalOpen9 && (
             <div className="contenedor3">
               <div className={tema ? 'modal-overlay-white' : 'modal-overlay'}>
-                <div className="close-button" onClick={() => closeModal8()} />
-                <button className="botonto" onClick={() => { setMostarCampos(true) }}>Cerrar</button>
+                <div className="close-button" onClick={() => closeModal9()} />
+                <h1 className="h1">Prestamo</h1>
+                <input
+                  type="search"
+                  className={tema ? 'inputt-white' : 'inputt'}
+                  placeholder="Busqueda"
+                  onChange={cambios}
+                  onKeyDown={apretarTecla}
+                  ref={inputRef}
+                  id="busqueda"
+                  onBlur={SeleccionarArticulo2} />
+                <select name="" className={tema ? 'selec-white' : 'selec'} id="select" onChange={SeleccionarArticulo2}>
+                  {select.map((elemento) =>
+                    <option key={elemento.id} value={elemento.nombre} >{elemento.nombre}</option>)}
+                </select>
+                <input type="text" name="" id="" placeholder="Profesor" className="inputt" />
+                <input type="text" name="" id="" placeholder="Curso" className="inputt" />
+                <input type="time" name="" id="" placeholder="Fecha" className="inputt" />
               </div>
             </div>)}
           {modalOpen2 && (
@@ -607,6 +633,8 @@ export default function Inventario() {
               <div className={tema ? 'botoncabe1-white' : 'botoncabe1'} id="botoncabe1" onClick={openModal} />
               <div className={tema ? 'botoncabe2-white' : 'botoncabe2'} id="botoncabe2" onClick={openModal7} />
               <div className={tema ? 'botoncabe3-white' : 'botoncabe3'} id="botoncabe3" onClick={openModal6} />
+              <div className={tema ? 'botoncabe3-white' : 'botoncabe3'} id="botoncabe3" onClick={openModal9} />
+              <div className={tema ? 'botoncabe3-white' : 'botoncabe3'} id="botoncabe3" onClick={() => setMostrarPrestamo(!mostrarPrestamo)} />
               <select className={tema ? 'selec2-white' : 'selec2'} id="ordenar" onChange={() => { filtrarAZ() }} defaultValue="a">
                 <option value="" selected>Ordenar</option>
                 <option value="a-z">A-Z</option>
@@ -614,7 +642,12 @@ export default function Inventario() {
                 <option value="+/-">+/-</option>
                 <option value="-/+">-/+</option>
               </select>
-              <input className={tema ? 'filter-white' : 'filter'} type="search" name="" id="filtrarArt" placeholder="Buscar" onChange={cambiosArticulo} />
+              <input
+                className={tema ? 'filter-white' : 'filter'}
+                type="search"
+                id="filtrarArt"
+                placeholder="Buscar"
+                onChange={cambiosArticulo} />
             </div>
           </header>
           <div className="contenedor">
@@ -638,15 +671,34 @@ export default function Inventario() {
               <InfiniteScroll dataLength={listaArticulo.length} hasMore={true} scrollableTarget="infiniteScroll">
                 <table>
                   <tbody>
-                    <tr>
-                      <td className="lista">Nombre</td>
-                      <td className="lista">Fecha</td>
-                      <td className="lista">ID</td>
-                      <td className="lista">Categoria</td>
-                      <td className="lista">Cantidad</td>
-                    </tr>
-                    {!mostarLista && listaArticulo}
-                    {mostarLista && artFiltrado}
+                    {!mostrarPrestamo && (
+                      <>
+                        <tr>
+                          <td className="lista">Nombre</td>
+                          <td className="lista">Fecha</td>
+                          <td className="lista">ID</td>
+                          <td className="lista">Categoria</td>
+                          <td className="lista">Cantidad</td>
+                        </tr>
+                        {!mostarLista && listaArticulo}
+                        {mostarLista && artFiltrado}
+                      </>
+                    )}
+                    {mostrarPrestamo && (
+                      <>
+
+                        <tr>
+                          <td className="lista2">Profesor</td>
+                          <td className="lista2">Curso</td>
+                          <td className="lista2">Hora</td>
+                          <td className="lista2">Alumno</td>
+                          <td className="lista2">Articulo</td>
+                          <td className="lista2">Cantidad</td>
+                          <td className="lista2">Prestador</td>
+                        </tr>
+                        {listaPrestamos}
+                      </>
+                    )}
                   </tbody>
                 </table>
               </InfiniteScroll>
