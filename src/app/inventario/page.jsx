@@ -7,9 +7,11 @@ import axios from "axios";
 import * as Validaciones from "./validar";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loading from "./loading";
+import { Prestamo } from "@/components/prestamo";
+import Conectar from "@/bd/conectarse";
 
 export default function Inventario() {
-  const[listaPrestamos,setListaPrestamos] = useState([])
+  const [listaPrestamos, setListaPrestamos] = useState([])
   const [mostarLista, setMostarList] = useState(false)
   const [articulos, setArticulos] = useState([])
   const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +27,16 @@ export default function Inventario() {
       await TraerCat()
     }
     init()
+    const prestamo = <Prestamo
+      profesor="hola"
+      curso="hola"
+      hora="hola"
+      alumno="hola"
+      articulo="hola"
+      cantidad="hola"
+      prestador="hola"
+    />
+    setListaPrestamos([...listaPrestamos, prestamo])
   }, [])
   useEffect(() => {
     const init = async () => {
@@ -149,6 +161,27 @@ export default function Inventario() {
   const openModalAyuda = () => {
     setModalOpenAyuda(!modalOpenAyuda)
   }
+  //_______________________________________________PRESTAMOS_______________________________________________//
+  const traerPrestamos = async () => {
+    try {
+      const prestamo = await axios.get('/api/prestamo').then(res => {
+        const lista = res.data.datos
+        const newComponent = lista.map(dato => (
+          <Prestamo
+            key={dato.id}
+            profesor={dato.profesor}
+            curso={dato.curso}
+            hora={dato.hora}
+            alumno={dato.alumno}
+            articulo={dato.articulo}
+            cantidad={dato.cantidad}
+            prestador={dato.prestador} />))
+        setListaPrestamos([...listaPrestamos, ...newComponent])
+      })
+    } catch (error) {
+      setIsLoading(false);
+    }
+  }
   //_______________________________________________ARTICULO_________________________________________________//
   const funcion = () => {
     const today = new Date();
@@ -183,7 +216,6 @@ export default function Inventario() {
         id={id}
         categoria={categoria}
         cantidad={cantidad}
-        tema={tema}
       />
       setListaArticulo([...listaArticulo, newComponent])
       GuardarArticulo(nombre, id, categoria, cantidad);
@@ -218,8 +250,7 @@ export default function Inventario() {
             fecha={dato.fecha}
             id={dato.id}
             categoria={dato.categoria}
-            cantidad={dato.cantidad}
-            tema={tema} />))
+            cantidad={dato.cantidad} />))
         setListaArticulo([...listaArticulo, ...newComponent])
       })
     } catch (error) {
@@ -273,7 +304,7 @@ export default function Inventario() {
           id={id}
           categoria={categoria}
           cantidad={cantidad}
-          tema={tema} />
+        />
         copia[indice] = componente
         setListaArticulo(copia)
         closeModal6()
@@ -435,40 +466,72 @@ export default function Inventario() {
     filtrarArticulo(e.target.value)
   }
   const filtrarArticulo = (params) => {
-    var resultado = listaArticulo.filter((elemento) => {
-      if (elemento.props.nombre.toString().toLowerCase().includes(params.toLowerCase())) {
-        return elemento
+    if (!mostrarPrestamo) {
+      var resultado = listaArticulo.filter((elemento) => {
+        if (elemento.props.nombre.toString().toLowerCase().includes(params.toLowerCase())) {
+          return elemento
+        }
+      })
+      setArtFiltrado(resultado)
+      if (params == "") {
+        setMostarList(false)
+      } else {
+        setMostarList(true)
       }
-    })
-    setArtFiltrado(resultado)
-    if (params == "") {
-      setMostarList(false)
     } else {
-      setMostarList(true)
-      setMostrarPrestamo(false)
+      var resultado = listaPrestamos.filter((elemento) => {
+        if (elemento.props.articulo.toString().toLowerCase().includes(params.toLowerCase())) {
+          return elemento
+        }
+      })
+      setArtFiltrado(resultado)
+      if (params == "") {
+        setMostarList(false)
+      } else {
+        setMostarList(true)
+      }
     }
   }
   const filtrarAZ = () => {
-    const valor = document.getElementById("ordenar").value
-    setMostarList(true)
-    if (valor == "a-z") {
-      const filtrador = [...listaArticulo].sort((a, b) => {
-        return a.props.nombre.localeCompare(b.props.nombre)
-      })
-      setArtFiltrado(filtrador)
-    } else if (valor == "z-a") {
-      const filtrador = [...listaArticulo].sort((a, b) => {
-        return b.props.nombre.localeCompare(a.props.nombre)
-      })
-      setArtFiltrado(filtrador)
-    } else if (valor == "+/-") {
-      setMostarList(false)
-    } else if (valor == "-/+") {
-      const filtrador = [...listaArticulo].sort((a, b) => b.props.id - a.props.id)
-      setArtFiltrado(filtrador)
+    if (!mostrarPrestamo) {
+      const valor = document.getElementById("ordenar").value
+      setMostarList(true)
+      if (valor == "a-z") {
+        const filtrador = [...listaArticulo].sort((a, b) => {
+          return a.props.nombre.localeCompare(b.props.nombre)
+        })
+        setArtFiltrado(filtrador)
+      } else if (valor == "z-a") {
+        const filtrador = [...listaArticulo].sort((a, b) => {
+          return b.props.nombre.localeCompare(a.props.nombre)
+        })
+        setArtFiltrado(filtrador)
+      } else if (valor == "+/-") {
+        setMostarList(false)
+      } else if (valor == "-/+") {
+        const filtrador = [...listaArticulo].sort((a, b) => b.props.id - a.props.id)
+        setArtFiltrado(filtrador)
+      } else {
+        setMostarList(false)
+      }
     } else {
-      setMostarList(false)
+      const valor = document.getElementById("ordenar").value
+      setMostarList(true)
+      if (valor == "a-z") {
+        const filtrador = [...listaPrestamos].sort((a, b) => {
+          return a.props.articulo.localeCompare(b.props.articulo)
+        })
+        setArtFiltrado(filtrador)
+      } else if (valor == "z-a") {
+        const filtrador = [...listaPrestamos].sort((a, b) => {
+          return b.props.articulo.localeCompare(a.props.articulo)
+        })
+        setArtFiltrado(filtrador)
+      } else {
+        setMostarList(false)
+      }
     }
+
   }
   const [tema, setTema] = useState(false)
   const modo = () => {
@@ -696,7 +759,8 @@ export default function Inventario() {
                           <td className="lista2">Cantidad</td>
                           <td className="lista2">Prestador</td>
                         </tr>
-                        {listaPrestamos}
+                        {!mostarLista && listaPrestamos}
+                        {mostarLista && artFiltrado}
                       </>
                     )}
                   </tbody>

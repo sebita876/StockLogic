@@ -2,9 +2,8 @@ import { NextResponse } from 'next/server';
 import Conectar from '@/bd/conectarse';
 import Herramienta from '@/bd/models/herramientas';
 
-
+Conectar()
 export async function GET(req, res) {
-  await Conectar()
   const Herramientas = await Herramienta.find();
   return NextResponse.json({ status: 200, message: 'Herramientas', datos: Herramientas })
 }
@@ -23,7 +22,6 @@ export async function POST(request) {
 }
 export async function PUT(req) {
   try {
-    await Conectar()
     const requesData = await req.json()
     let { id, nombre, categoria, cantidad, fecha } = requesData
     const _id = await Herramienta.find({ id: id })

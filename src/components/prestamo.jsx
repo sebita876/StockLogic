@@ -1,4 +1,4 @@
-export function Articulo(props) {
+export function Prestamo(props) {
     return <tr key={props.key}>
         <td className="lista2">{props.profesor}</td>
         <td className="lista2">{props.curso}</td>

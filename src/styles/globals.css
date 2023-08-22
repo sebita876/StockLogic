@@ -1,4 +1,3 @@
-
 .fondo {
 
   position: fixed;
@@ -11,47 +10,25 @@
   background-size: cover;
   z-index: -1;
 }
-.fotoStock{
+
+.fotoStock {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url('../../public/Adox.png');
   width: 200px;
   height: 90px;
-
 }
-.fondo2 {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  background: linear-gradient(45deg, #64b2e6, #da7343);
-}
-
-.fotoAdox {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 440px;
-  height: 320px;
-  background-image: url('../../public/Adox.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  z-index: 1;
-}
-
 .login {
   z-index: 1;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #FFFFFF;  height: 460px;
+  background: #FFFFFF;
+  height: 460px;
   width: 350px;
   border-radius: 10px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -95,17 +72,6 @@
   color: white;
   font-size: 15px;
 }
-
-
-.divFoto {
-  margin: 20% auto 30px;
-  width: 20%;
-  height: 20%;
-  background-image: url('../../public/usuario.png');
-  background-size: cover;
-  background-position: center;
-}
-
 .sumbmit {
   border: 3px solid black;
   border-radius: 100px;
@@ -409,6 +375,7 @@ td {
 }
 
 .modalError .close-button {
+
   background-size: cover;
   height: 30px;
   width: 30px;
@@ -419,6 +386,20 @@ td {
 }
 
 .modalError .close-button:hover {
+  background-image: url(../../public/cerrarhover.png);
+}
+.modalError-white .close-button {
+
+  background-size: cover;
+  height: 30px;
+  width: 30px;
+  margin-bottom: -5%;
+  margin-left: 90%;
+  cursor: pointer;
+  background-image: url(../../public/cerrar.png);
+}
+
+.modalError-white .close-button:hover {
   background-image: url(../../public/cerrarhover.png);
 }
 
@@ -523,6 +504,7 @@ w .modal-content button {
   color: rgb(0, 0, 0);
   cursor: default;
 }
+
 .lista2 {
   background-size: contain;
   border-color: rgb(22, 1, 4);
@@ -697,7 +679,7 @@ option {
   text-align: center;
   flex-direction: column;
   font-size: x-large;
-  Font-family: Consolas, monaco, monospace;
+  font-family: "Roboto", sans-serif;
 }
 
 .sino {
@@ -775,9 +757,25 @@ option {
 }
 
 .modalError {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 80px;
   width: 300px;
   background-color: #c4001a;
+  position: absolute;
+  top: 16%;
+  left: 15%;
+  border-radius: 10px;
+  overflow: visible;
+}
+.modalError-white {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  width: 300px;
+  background-color: #c74052;
   position: absolute;
   top: 16%;
   left: 15%;
