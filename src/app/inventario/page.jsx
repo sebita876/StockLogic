@@ -162,7 +162,6 @@ export default function Inventario() {
   }
   //_______________________________________________PRESTAMOS_______________________________________________//
   const traerPrestamos = async () => {
-    try {
       const prestamo = await axios.get('/api/prestamo').then(res => {
         const lista = res.data.datos
         const newComponent = lista.map(dato => (
@@ -177,9 +176,6 @@ export default function Inventario() {
             prestador={dato.prestador} />))
         setListaPrestamos([...listaPrestamos, ...newComponent])
       })
-    } catch (error) {
-      setIsLoading(false);
-    }
   }
   //_______________________________________________ARTICULO_________________________________________________//
   const funcion = () => {
