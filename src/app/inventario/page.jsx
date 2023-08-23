@@ -8,7 +8,6 @@ import * as Validaciones from "./validar";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loading from "./loading";
 import { Prestamo } from "@/components/prestamo";
-import Conectar from "@/bd/conectarse";
 
 export default function Inventario() {
   const [listaPrestamos, setListaPrestamos] = useState([])

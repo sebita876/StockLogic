@@ -10,15 +10,8 @@ export async function middleware(request) {
     );
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
     matcher: [
-        /*
-         * Match all request paths except for the ones starting with:
-         * - api (API routes)
-         * - _next/static (static files)
-         * - favicon.ico (favicon file)
-         */
         '/inventario',
         '/login'
     ],

@@ -1,3 +1,7 @@
+body {
+  font-family: "Roboto", sans-serif;
+}
+
 .fondo {
 
   position: fixed;
@@ -18,6 +22,7 @@
   width: 200px;
   height: 90px;
 }
+
 .login {
   z-index: 1;
   position: absolute;
@@ -33,11 +38,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
 }
 
 .inputTextLogin {
-  font-family: "Roboto", sans-serif;
+
   outline: 0;
   background: #c9c7c7;
   width: 200px;
@@ -51,7 +55,6 @@
 .inputTextLogin::placeholder {
   text-align: center;
   color: white;
-  font-family: "Roboto", sans-serif;
 }
 
 .inputTextLogin:hover {
@@ -72,6 +75,7 @@
   color: white;
   font-size: 15px;
 }
+
 .sumbmit {
   border: 3px solid black;
   border-radius: 100px;
@@ -80,29 +84,14 @@
   cursor: pointer;
   width: 200px;
   height: 35px;
-  font-family: Consolas, monaco, monospace;
+
   color: white;
 }
 
 .Link {
   color: white;
-  Font-family: Consolas, monaco, monospace;
-  font-size: 15px;
-}
 
-.button-link {
-  display: inline-block;
-  border: 3px solid black;
-  border-radius: 100px;
-  margin: 5% 10px 10%;
-  background: linear-gradient(45deg, black, gray);
-  cursor: pointer;
-  width: 90%;
-  height: 25px;
-  font-family: Consolas, monaco, monospace;
-  color: white;
-  font-size: 100%;
-  text-decoration: none;
+  font-size: 15px;
 }
 
 .container {
@@ -124,12 +113,6 @@
 .containerCheck {
   display: flex;
   align-items: center;
-}
-
-.inventario {
-  background-color: #64b2e6;
-  width: 10px;
-  height: 100%;
 }
 
 .header {
@@ -263,13 +246,12 @@ td {
 }
 
 .h1 {
-  font-family: Consolas, monaco, monospace;
+
   font-size: 120%;
   text-align: center;
 }
 
 .li {
-  font-family: Consolas, monaco, monospace;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -300,7 +282,9 @@ td {
   cursor: pointer;
 }
 
-.botoncabe1:hover {
+.botoncabe1:hover,
+.botoncabe2:hover,
+.botoncabe3:hover {
 
   -webkit-box-shadow: 0px 10px 30px 0px rgba(255, 255, 255, 1);
   -moz-box-shadow: 0px 10px 30px 0px rgba(255, 255, 255, 1);
@@ -319,15 +303,6 @@ td {
   cursor: pointer;
 }
 
-.botoncabe2:hover {
-
-  -webkit-box-shadow: 0px 10px 30px 0px rgba(255, 255, 255, 1);
-  -moz-box-shadow: 0px 10px 30px 0px rgba(255, 255, 255, 1);
-  box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, 1);
-  height: 100.5%;
-  width: 7%;
-}
-
 .botoncabe3 {
   float: left;
   margin: 0 2.5% 0 0;
@@ -336,16 +311,6 @@ td {
   width: 6.5%;
   border-radius: 15px;
   cursor: pointer;
-}
-
-
-.botoncabe3:hover {
-
-  -webkit-box-shadow: 0px 10px 30px 0px rgba(255, 255, 255, 1);
-  -moz-box-shadow: 0px 10px 30px 0px rgba(255, 255, 255, 1);
-  box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, 1);
-  height: 100.5%;
-  width: 7%;
 }
 
 .modal-overlay {
@@ -388,6 +353,7 @@ td {
 .modalError .close-button:hover {
   background-image: url(../../public/cerrarhover.png);
 }
+
 .modalError-white .close-button {
 
   background-size: cover;
@@ -421,17 +387,6 @@ td {
   background-image: url(../../public/cerrar.png);
 }
 
-.close-button {
-  background-size: cover;
-  height: 30px;
-  width: 30px;
-  position: absolute;
-  margin-top: -21%;
-  margin-left: 18%;
-  cursor: pointer;
-  background-image: url(../../public/cerrar.png);
-}
-
 .close-button:hover {
   background-image: url(../../public/cerrarhover.png);
 }
@@ -448,7 +403,7 @@ td {
   background-color: rgb(20, 14, 14);
   border-radius: 100px;
   color: rgb(255, 255, 255);
-  Font-family: Consolas, monaco, monospace;
+
   text-align: center;
   appearance: none;
 }
@@ -460,7 +415,7 @@ td {
 .inputt::placeholder {
   text-align: center;
   color: rgb(255, 255, 255);
-  Font-family: Consolas, monaco, monospace;
+
   font-size: 15px;
 }
 
@@ -482,7 +437,7 @@ w .modal-content button {
 }
 
 .li2 {
-  font-family: Consolas, monaco, monospace;
+
   display: flex;
   margin-top: 3px;
   align-items: center;
@@ -499,7 +454,7 @@ w .modal-content button {
   height: 25px;
   min-width: 200px;
   text-align: center;
-  font-family: Consolas, monaco, monospace;
+
   font-size: 18px;
   color: rgb(0, 0, 0);
   cursor: default;
@@ -513,7 +468,7 @@ w .modal-content button {
   min-width: 155px;
   height: 25px;
   text-align: center;
-  font-family: Consolas, monaco, monospace;
+
   font-size: 18px;
   color: rgb(0, 0, 0);
   cursor: default;
@@ -530,7 +485,7 @@ w .modal-content button {
   height: 100vh;
   padding: 0;
   position: fixed;
-  background-color: rgba(207, 128, 128, 0.842);
+  background-color: rgba(128, 207, 170, 0.842);
   opacity: 0.9;
   display: flex;
   align-items: center;
@@ -549,7 +504,7 @@ w .modal-content button {
 .custom-loader::after {
   content: "";
   grid-area: 1/1;
-  --c: radial-gradient(farthest-side, #F40000 92%, #0000);
+  --c: radial-gradient(farthest-side, #31f400 92%, #001a0600);
   background:
     var(--c) 50% 0,
     var(--c) 50% 100%,
@@ -581,14 +536,14 @@ option {
 .escondido {
   color: #ffff;
   text-align: center;
-  Font-family: Consolas, monaco, monospace;
+
   font-size: x-large;
 }
 
 .escondido2 {
   margin-bottom: none;
   color: #ffff;
-  font-family: Consolas, monaco, monospace;
+
   font-size: large;
 }
 
@@ -630,7 +585,7 @@ option {
   background-color: rgb(158, 12, 12);
   border-radius: 100px;
   color: rgb(255, 255, 255);
-  Font-family: Consolas, monaco, monospace;
+
   cursor: pointer;
 }
 
@@ -646,7 +601,7 @@ option {
 .h3 {
   margin-top: 0;
   margin-bottom: 0;
-  Font-family: Consolas, monaco, monospace;
+
   color: black
 }
 
@@ -686,7 +641,7 @@ option {
   text-align: center;
   flex-direction: column;
   font-size: large;
-  Font-family: Consolas, monaco, monospace;
+
 }
 
 .text {
@@ -769,6 +724,7 @@ option {
   border-radius: 10px;
   overflow: visible;
 }
+
 .modalError-white {
   display: flex;
   align-items: center;
@@ -804,7 +760,7 @@ option {
 .filter::placeholder {
   text-align: center;
   color: white;
-  Font-family: Consolas, monaco, monospace;
+
 }
 
 .selec2 {
@@ -827,7 +783,7 @@ option {
 .Error {
   text-align: center;
   color: white;
-  Font-family: Consolas, monaco, monospace;
+
 }
 
 .Error2 {
@@ -915,7 +871,7 @@ option {
   background-color: rgb(187, 112, 112);
   border-radius: 100px;
   color: rgb(0, 0, 0);
-  Font-family: Consolas, monaco, monospace;
+
   text-align: center;
 }
 
@@ -971,7 +927,7 @@ option {
 .filter-white::placeholder {
   text-align: center;
   color: rgb(0, 0, 0);
-  Font-family: Consolas, monaco, monospace;
+
 }
 
 .izquierda-white {
@@ -1064,7 +1020,7 @@ option {
   height: 25px;
   min-width: 200px;
   text-align: center;
-  font-family: Consolas, monaco, monospace;
+
   color: rgb(0, 0, 0);
   cursor: default;
 }
@@ -1097,7 +1053,7 @@ option {
 .inputt-white::placeholder {
   text-align: center;
   color: rgb(0, 0, 0);
-  Font-family: Consolas, monaco, monospace;
+
   font-size: 15px;
 }
 
