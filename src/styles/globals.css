@@ -219,7 +219,7 @@ body {
   height: 50%;
   aspect-ratio: 1;
   background-position: center;
-  background-image: url('../../public/perfil.png');
+  /*background-image: url('../../public/perfil.png');*/
   background-size: cover;
 }
 
@@ -246,7 +246,6 @@ td {
 }
 
 .h1 {
-
   font-size: 120%;
   text-align: center;
 }
@@ -323,7 +322,6 @@ td {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
 }
 
 .modal-overlay2 {
@@ -1033,7 +1031,7 @@ option {
   height: 50%;
   aspect-ratio: 1;
   background-position: center;
-  background-image: url('../../public/perfil-white.png');
+  /*background-image: url('../../public/perfil-white.png');*/
   background-size: cover;
 }
 
@@ -1059,4 +1057,92 @@ option {
 
 .selec-white:hover {
   background-color: #8f3443;
+}
+
+.contSelector {
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50%;
+  width: 70%;
+  overflow: auto;
+  margin-left: 5%;
+  border: 2px solid black;
+}
+.contSelector::-webkit-scrollbar {
+  width: 10px;
+}
+
+.contSelector::-webkit-scrollbar-thumb {
+  background-color: #616161;
+  border-radius: 10px;
+}
+
+.contSelector::-webkit-scrollbar-track {
+  background-color: transparent;
+  opacity: 0;
+}
+
+.agregar {
+  background-image: url(../../public/descargar.png);
+  background-position: center;
+  background-size: cover;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  margin-top: -11%;
+  margin-right: -10%;
+  cursor: pointer;
+}
+.modal-overlay-prestamo{
+  border: #000000 3px solid;
+  border-radius: 30px;
+  width: 22%;
+  height: 60%;
+  background: #6b171a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.modal-overlay-prestamo-white{
+  border: #000000 3px solid;
+  border-radius: 30px;
+  width: 22%;
+  height: 60%;
+  background: #6b171a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.modal-overlay-prestamo .close-button{
+  background-size: cover;
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  margin-top: -26%;
+  margin-left: 18%;
+  font-size: 20px;
+  cursor: pointer;
+  background-image: url(../../public/cerrar.png);
+}
+
+.modal-overlay-prestamo .inputt{
+  margin-top: 2%;
+}
+
+.modal-overlay-prestamo .botonto{
+  margin-top: 3%;
+}
+
+.modal-overlay-prestamo .h1{
+  font-size: 30px;
+  margin-bottom: 0;
+  margin-top: 5%;
+}
+.modal-overlay-prestamo .h2{
+  font-size: 20px;
+  margin-top: 3%;
 }

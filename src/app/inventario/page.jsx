@@ -8,8 +8,15 @@ import * as Validaciones from "./validar";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loading from "./loading";
 import { Prestamo } from "@/components/prestamo";
+import { Lit } from "@/components/li";
+
 
 export default function Inventario() {
+  const[listaSelect, setListaSelect] = useState([])
+  const agregarSelect = () =>{
+    const componente = <Lit lista={listaArticulo}></Lit>
+    setListaSelect([...listaSelect, componente])
+  }
   const [listaPrestamos, setListaPrestamos] = useState([])
   const [mostarLista, setMostarList] = useState(false)
   const [articulos, setArticulos] = useState([])
@@ -103,6 +110,7 @@ export default function Inventario() {
     setModalOpen9(true)
   }
   const closeModal9 = () => {
+    setListaSelect([])
     setModalOpen9(false)
   }
   const [modalOpen4, setModalOpen4] = useState(false)
@@ -162,20 +170,20 @@ export default function Inventario() {
   }
   //_______________________________________________PRESTAMOS_______________________________________________//
   const traerPrestamos = async () => {
-      const prestamo = await axios.get('/api/prestamo').then(res => {
-        const lista = res.data.datos
-        const newComponent = lista.map(dato => (
-          <Prestamo
-            key={dato.id}
-            profesor={dato.profesor}
-            curso={dato.curso}
-            hora={dato.hora}
-            alumno={dato.alumno}
-            articulo={dato.articulo}
-            cantidad={dato.cantidad}
-            prestador={dato.prestador} />))
-        setListaPrestamos([...listaPrestamos, ...newComponent])
-      })
+    const prestamo = await axios.get('/api/prestamo').then(res => {
+      const lista = res.data.datos
+      const newComponent = lista.map(dato => (
+        <Prestamo
+          key={dato.id}
+          profesor={dato.profesor}
+          curso={dato.curso}
+          hora={dato.hora}
+          alumno={dato.alumno}
+          articulo={dato.articulo}
+          cantidad={dato.cantidad}
+          prestador={dato.prestador} />))
+      setListaPrestamos([...listaPrestamos, ...newComponent])
+    })
   }
   //_______________________________________________ARTICULO_________________________________________________//
   const funcion = () => {
@@ -207,13 +215,13 @@ export default function Inventario() {
       }
       const newComponent = <Articulo
         fecha={funcion()}
-        nombre={nombre}
+        nombre={nombre.toLowerCase()}
         id={id}
         categoria={categoria}
         cantidad={cantidad}
       />
       setListaArticulo([...listaArticulo, newComponent])
-      GuardarArticulo(nombre, id, categoria, cantidad);
+      GuardarArticulo(nombre.toLowerCase(), id, categoria, cantidad);
       closeModal()
     } else {
       document.getElementById("H1 hidden").hidden = false
@@ -352,9 +360,14 @@ export default function Inventario() {
     if (validacion == true) {
       closeModal2()
       let id = 1
-      const newComponent = <Lista nombre={nombre} id={id} funcion={filtrarCat} state={listaArticulo} />
+      const newComponent =
+        <Lista
+          nombre={nombre.toLowerCase()}
+          id={id}
+          funcion={filtrarCat}
+          state={listaArticulo} />
       setListaCat([...listaCat, newComponent])
-      guardarCat(nombre, id)
+      guardarCat(nombre.toLowerCase(), id)
     }
     else {
       document.getElementById("H1 hidden").hidden = false
@@ -616,25 +629,22 @@ export default function Inventario() {
             </div>)}
           {modalOpen9 && (
             <div className="contenedor3">
-              <div className={tema ? 'modal-overlay-white' : 'modal-overlay'}>
+              <div className={tema ? 'modal-overlay-prestamo-white' : 'modal-overlay-prestamo'}>
                 <div className="close-button" onClick={() => closeModal9()} />
                 <h1 className="h1">Prestamo</h1>
-                <input
-                  type="search"
-                  className={tema ? 'inputt-white' : 'inputt'}
-                  placeholder="Busqueda"
-                  onChange={cambios}
-                  onKeyDown={apretarTecla}
-                  ref={inputRef}
-                  id="busqueda"
-                  onBlur={SeleccionarArticulo2} />
-                <select name="" className={tema ? 'selec-white' : 'selec'} id="select" onChange={SeleccionarArticulo2}>
-                  {select.map((elemento) =>
-                    <option key={elemento.id} value={elemento.nombre} >{elemento.nombre}</option>)}
-                </select>
-                <input type="text" name="" id="" placeholder="Profesor" className="inputt" />
-                <input type="text" name="" id="" placeholder="Curso" className="inputt" />
-                <input type="time" name="" id="" placeholder="Fecha" className="inputt" />
+                <div className="agregar" onClick={agregarSelect}></div>
+                <h1 className="h2">Articulos</h1>
+                <div className="contSelector">
+                  {listaSelect.map((element)=>(
+                    <div key={1}>
+                      {element}
+                    </div>
+                  ))}
+                </div>
+                <input type="text" className="inputt" placeholder="Profesor"/>
+                <input type="text" className="inputt" placeholder="Curso"/>
+                <input type="time" name="" id="" className="inputt" />
+                <button className="botonto">Agregar</button>
               </div>
             </div>)}
           {modalOpen2 && (
