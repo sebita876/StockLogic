@@ -11,7 +11,7 @@ async function guardarUsuario(dni, contraseña, admin) {
         admin: admin
     }).then(data => console.log("guardado|"))
 }
-export async function validarUsuario(closeModal,router) {
+export async function validarUsuario(closeModal, router) {
     const dni = document.getElementById('DNI').value
     const contraseña = document.getElementById('contraseña').value
     const repContraseña = document.getElementById('RepContraseña').value
@@ -22,13 +22,13 @@ export async function validarUsuario(closeModal,router) {
     const listaUsuarios = await traerUsuarios()
     const arrayDni = listaUsuarios.data.datos.map(elemento => elemento.dni == dni)
     const validacionDni = arrayDni.includes(true)
-    if(contraseña != ""){
+    if (contraseña != "") {
         if (contraseña == repContraseña) {
             validarContraseña = true
         } else {
             validarContraseña = false
         }
-    }else{
+    } else {
         document.getElementById("H1hidden").hidden = false
         document.getElementById("H2hidden").hidden = true
         return
@@ -63,19 +63,26 @@ export async function verificarAdmin(closeModal) {
         document.getElementById("H2 hidden").hidden = true
     }
 }
-export async function validarInicio(user,pass,router){
-    const listaUsuarios = await traerUsuarios()
+export async function validarInicio(user, pass, router) {
+    const listaUsuarios = await traerUsuarios()  
     const array = listaUsuarios.data.datos.map(elemento => elemento.dni == user && elemento.contraseña == pass);
     const validar = array.includes(true)
-    if (validar == true){
+    if (validar == true) {
+        document.getElementById("boton1").style.cursor = "not-allowed"
+        document.getElementById("boton2").style.cursor = "not-allowed"
+        document.getElementById("boton1").style.backgroundColor = "#005747"
+        document.getElementById("boton2").style.backgroundColor = "#005747"
+        document.getElementById("boton1").disabled = true  
+        document.getElementById("boton2").disabled = true
         setCookie(null, "isLogged", "true", {
             maxAge: 3600,
             path: "/",
         });
         router.push('/inventario')
+
         document.getElementById("H1").hidden = true
         document.getElementById("H2").hidden = false
-    }else{
+    } else {
         document.getElementById("H1").hidden = false
     }
 }

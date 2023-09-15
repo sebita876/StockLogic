@@ -11,9 +11,8 @@ export function ValidarCat(listaCat, nombre) {
 export function ValidarArticulo(listaArticulo, nombre, cantidad) {
     const array = listaArticulo.map(elemento => elemento.props.nombre === nombre)
     const validacion = array.includes(true)
-    const nombreValido = validarSoloLetras(nombre)
     const numeroValido = esNumerico(cantidad)
-    if (validacion == false && nombreValido == true && numeroValido == true) {
+    if (validacion == false  && numeroValido == true) {
         return true
     } else {
         return false

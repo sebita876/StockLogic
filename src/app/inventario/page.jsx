@@ -12,8 +12,8 @@ import { Lit } from "@/components/li";
 
 
 export default function Inventario() {
-  const[listaSelect, setListaSelect] = useState([])
-  const agregarSelect = () =>{
+  const [listaSelect, setListaSelect] = useState([])
+  const agregarSelect = () => {
     const componente = <Lit lista={listaArticulo}></Lit>
     setListaSelect([...listaSelect, componente])
   }
@@ -35,14 +35,20 @@ export default function Inventario() {
     init()
     const prestamo = <Prestamo
       profesor="hola"
-      curso="hola"
-      hora="hola"
-      alumno="hola"
-      articulo="hola"
-      cantidad="hola"
       prestador="hola"
+      FechaPrestado="hola"
+      IDprestamo="Hola"
+      Activo= {true}
     />
-    setListaPrestamos([...listaPrestamos, prestamo])
+    const prestamo2 = <Prestamo
+      profesor="hola2"
+      prestador="hola2"
+      FechaPrestado="hola2"
+      IDprestamo="Hola"
+      Activo= {true}
+    />
+    const array = [prestamo,prestamo2]
+    setListaPrestamos([...listaPrestamos, ...array])
   }, [])
   useEffect(() => {
     const init = async () => {
@@ -350,6 +356,7 @@ export default function Inventario() {
   }
   const [artFiltrado, setArtFiltrado] = useState([])
   const filtrarCat = (nombre, state) => {
+    setMostrarPrestamo(false)
     const filtrado = state.filter(elemento => elemento.props.categoria === nombre)
     setArtFiltrado(filtrado)
     setMostarList(true)
@@ -359,7 +366,17 @@ export default function Inventario() {
     const validacion = Validaciones.ValidarCat(listaCat, nombre)
     if (validacion == true) {
       closeModal2()
-      let id = 1
+      let id
+      const length = listaCat.length
+      if (length == 0) {
+        id = 1
+      }
+      else {
+        const resta = listaCat.length - 1
+        const objeto = listaCat[resta]
+        const props = objeto.props.id
+        id = props + 1
+      }
       const newComponent =
         <Lista
           nombre={nombre.toLowerCase()}
@@ -630,19 +647,19 @@ export default function Inventario() {
           {modalOpen9 && (
             <div className="contenedor3">
               <div className={tema ? 'modal-overlay-prestamo-white' : 'modal-overlay-prestamo'}>
-                <div className="close-button" onClick={() => closeModal9()} />
+                <div className="close-buttonCONT3" onClick={() => closeModal9()} />
                 <h1 className="h1">Prestamo</h1>
                 <div className="agregar" onClick={agregarSelect}></div>
                 <h1 className="h2">Articulos</h1>
                 <div className="contSelector">
-                  {listaSelect.map((element)=>(
+                  {listaSelect.map((element) => (
                     <div key={1}>
                       {element}
                     </div>
                   ))}
                 </div>
-                <input type="text" className="inputt" placeholder="Profesor"/>
-                <input type="text" className="inputt" placeholder="Curso"/>
+                <input type="text" className="inputt" placeholder="Profesor" />
+                <input type="text" className="inputt" placeholder="Curso" />
                 <input type="time" name="" id="" className="inputt" />
                 <button className="botonto">Agregar</button>
               </div>
@@ -698,11 +715,12 @@ export default function Inventario() {
             <div className="absolute" onClick={openModalAyuda} />
             <div className={tema ? 'perfil-white' : 'perfil'} />
             <div className="contenedor2">
-              <div className={tema ? 'botoncabe1-white' : 'botoncabe1'} id="botoncabe1" onClick={openModal} />
-              <div className={tema ? 'botoncabe2-white' : 'botoncabe2'} id="botoncabe2" onClick={openModal7} />
-              <div className={tema ? 'botoncabe3-white' : 'botoncabe3'} id="botoncabe3" onClick={openModal6} />
-              <div className={tema ? 'botoncabe3-white' : 'botoncabe3'} id="botoncabe3" onClick={openModal9} />
-              <div className={tema ? 'botoncabe3-white' : 'botoncabe3'} id="botoncabe3" onClick={() => setMostrarPrestamo(!mostrarPrestamo)} />
+              <input
+                className={tema ? 'filter-white' : 'filter'}
+                type="search"
+                id="filtrarArt"
+                placeholder="Buscar"
+                onChange={cambiosArticulo} />
               <select className={tema ? 'selec2-white' : 'selec2'} id="ordenar" onChange={() => { filtrarAZ() }} defaultValue="a">
                 <option value="" selected>Ordenar</option>
                 <option value="a-z">A-Z</option>
@@ -710,12 +728,13 @@ export default function Inventario() {
                 <option value="+/-">+/-</option>
                 <option value="-/+">-/+</option>
               </select>
-              <input
-                className={tema ? 'filter-white' : 'filter'}
-                type="search"
-                id="filtrarArt"
-                placeholder="Buscar"
-                onChange={cambiosArticulo} />
+              <div className={tema ? 'botoncabe1-white' : 'botoncabe1'} id="botoncabe1" onClick={openModal} />
+              <div className={tema ? 'botoncabe2-white' : 'botoncabe2'} id="botoncabe2" onClick={openModal7} />
+              <div className={tema ? 'botoncabe3-white' : 'botoncabe3'} id="botoncabe3" onClick={openModal6} />
+              <div className={tema ? 'botoncabe4-white' : 'botoncabe4'} id="botoncabe4" onClick={openModal9} />
+              <div className={tema ? 'botoncabe5-white' : 'botoncabe5'} id="botoncabe5" onClick={() => {setMostrarPrestamo(!mostrarPrestamo); setMostarList(false)}} />
+
+
             </div>
           </header>
           <div className="contenedor">
@@ -737,7 +756,7 @@ export default function Inventario() {
             </div>
             <div className="resto" id="infiniteScroll">
               <InfiniteScroll dataLength={listaArticulo.length} hasMore={true} scrollableTarget="infiniteScroll">
-                <table>
+                <table className="table">
                   <tbody>
                     {!mostrarPrestamo && (
                       <>
@@ -756,13 +775,10 @@ export default function Inventario() {
                       <>
 
                         <tr>
-                          <td className="lista2">Profesor</td>
-                          <td className="lista2">Curso</td>
-                          <td className="lista2">Hora</td>
-                          <td className="lista2">Alumno</td>
-                          <td className="lista2">Articulo</td>
-                          <td className="lista2">Cantidad</td>
                           <td className="lista2">Prestador</td>
+                          <td className="lista2">Profesor</td>
+                          <td className="lista2">Fecha</td>
+                          <td className="lista2">Activo</td>                          
                         </tr>
                         {!mostarLista && listaPrestamos}
                         {mostarLista && artFiltrado}
