@@ -1,15 +1,10 @@
 import axios from "axios";
-import { setCookie } from "nookies";
-async function traerUsuarios() {
-    const listaUsuarios = await axios.get('/api/usuarios')
-    return listaUsuarios
-}
 async function guardarUsuario(dni, contraseña, admin) {
     await axios.post('/api/usuarios', {
         dni: dni,
         contraseña: contraseña,
         admin: admin
-    }).then(data => console.log("guardado|"))
+    }).then(data => console.log("guardado"))
 }
 export async function validarUsuario(closeModal, router) {
     const dni = document.getElementById('DNI').value
@@ -61,28 +56,5 @@ export async function verificarAdmin(closeModal) {
     } else {
         document.getElementById("HI hidden").hidden = false
         document.getElementById("H2 hidden").hidden = true
-    }
-}
-export async function validarInicio(user, pass, router) {
-    const listaUsuarios = await traerUsuarios()  
-    const array = listaUsuarios.data.datos.map(elemento => elemento.dni == user && elemento.contraseña == pass);
-    const validar = array.includes(true)
-    if (validar == true) {
-        document.getElementById("boton1").style.cursor = "not-allowed"
-        document.getElementById("boton2").style.cursor = "not-allowed"
-        document.getElementById("boton1").style.backgroundColor = "#005747"
-        document.getElementById("boton2").style.backgroundColor = "#005747"
-        document.getElementById("boton1").disabled = true  
-        document.getElementById("boton2").disabled = true
-        setCookie(null, "isLogged", "true", {
-            maxAge: 3600,
-            path: "/",
-        });
-        router.push('/inventario')
-
-        document.getElementById("H1").hidden = true
-        document.getElementById("H2").hidden = false
-    } else {
-        document.getElementById("H1").hidden = false
     }
 }
