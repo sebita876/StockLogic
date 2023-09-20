@@ -272,9 +272,16 @@ td {
   color: white;
   font-size: 120%;
   text-align: center;
-  margin-right: -25px;
   font-family: 'Roboto Mono', monospace;
   font-weight: bold;
+}
+.izquierda .h1{
+  margin-right: -25px;
+}
+.H1 {
+  top: 0;
+  font-size: 150%;
+  position: absolute;
 }
 
 .h1PRES {
@@ -299,14 +306,12 @@ td {
 
 .li {
   display: flex;
-  align-items: right;
   cursor: pointer;
   align-self: flex-start;
   list-style: none;
   font-size: 18px;
   color: white;
   position: relative;
-  left: 38px;
   top: -20px;
   font-family: 'Roboto Mono', monospace;
 
@@ -399,29 +404,34 @@ td {
 
 .modal-overlay {
   border: #000000 3px solid;
-  border-radius: 30px;
-  width: 22%;
+  width: 50%;
   height: 50%;
   background: #77cca4;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  position: absolute;
-  left: 150px;
-}
-
-.modal-overlay2 {
-  border: #000000 3px solid;
-  border-radius: 30px;
-  width: 22%;
-  height: 60%;
-  background: #000000;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  position: absolute;
+}
+
+.modal-overlay2 {
+  border: #000000 3px solid;
+  width: 50%;
+  height: 50%;
+  background: #77cca4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  left: 150px;
+}
+
+.content{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  height: 100%;
 }
 
 .modalError {
@@ -430,24 +440,6 @@ td {
   width: 10px;
   cursor: pointer;
 
-}
-
-.close-buttonCONT3 {
-  background-size: cover;
-  height: 30px;
-  width: 30px;
-  margin-top: 30px;
-  float: right;
-  position: relative;
-  top: -80px;
-  right: 95%;
-  cursor: pointer;
-  background-image: url(../../public/cerrar.png);
-  border-style: dotted;
-}
-
-.close-buttonCONT3:hover {
-  background-image: url(../../public/cerrarhover.png);
 }
 
 .modal-content {
@@ -461,8 +453,8 @@ td {
   height: 30px;
   width: 30px;
   position: absolute;
-  margin-top: -15%;
-  margin-left: -85%;
+  top: 0;
+  right: 0;
   font-size: 20px;
   cursor: pointer;
   background-image: url(../../public/cerrar.png);
@@ -484,9 +476,8 @@ td {
   margin-bottom: 10px;
   border: 3px solid #04846d91;
   background-color: #17181f;
-  border-radius: 100px;
   color: rgb(255, 255, 255);
-
+  border-radius: 100px;
   text-align: center;
   appearance: none;
 }
@@ -507,8 +498,8 @@ td {
 }
 
 .contenedor3 {
-  height: 50%;
-  width: 50%;
+  height: 100%;
+  width: 100%;
   background-color: #17181f65;
   display: flex;
   justify-content: center;
@@ -626,20 +617,19 @@ option {
 .escondido {
   color: #ffff;
   text-align: center;
-
   font-size: x-large;
 }
 
 .escondido2 {
   margin-bottom: none;
   color: #ffff;
-
   font-size: large;
 }
 
 .selec {
-  background-color: #160104;
-  color: #ffff;
+  border: 3px solid #04846d91;
+  background-color: #17181f;
+  color: rgb(255, 255, 255);
   margin-bottom: 3%;
   border-radius: 100px;
   width: 150px;
@@ -660,7 +650,7 @@ option {
 }
 
 .selec:hover {
-  background-color: #2e0209;
+  background-color: rgb(45, 63, 57);
 }
 
 .selec-white:hover {
@@ -771,7 +761,7 @@ option {
   margin-right: auto;
   align-self: flex-end;
   align-items: center;
-  background-color: #00444373;
+  background-color: #004443;
   height: 250px;
   width: 500px;
   animation: desplegar 0.3s ease-in-out forwards;
@@ -1236,14 +1226,12 @@ option {
 
 .contSelector {
   flex-direction: column;
-  display: flex;
   align-items: center;
-  justify-content: center;
+  display: flex;
   height: 50%;
-  width: 70%;
+  width: auto;
   overflow: auto;
-  margin-left: 5%;
-  border: 2px solid black;
+  margin-left: 30px;
 }
 
 .contSelector::-webkit-scrollbar {
@@ -1267,8 +1255,8 @@ option {
   width: 20px;
   height: 20px;
   position: absolute;
-  margin-top: -11%;
-  margin-right: -10%;
+  top: 22%;
+  left: 35%;
   cursor: pointer;
 }
 
@@ -1343,8 +1331,8 @@ option {
   background-color: white;
   height: 90%;
   width: 40%;
-  padding: 20px; 
-  box-sizing: border-box; 
+  padding: 20px;
+  box-sizing: border-box;
   overflow: auto;
 
 }
@@ -1355,7 +1343,7 @@ option {
 }
 
 .listaFactura {
-  width: 50%; 
+  width: 50%;
   padding: 5px;
   white-space: nowrap;
 }
@@ -1381,7 +1369,8 @@ option {
   opacity: 0;
 }
 
-
-
-
-
+.divSelec{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

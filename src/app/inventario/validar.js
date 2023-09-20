@@ -29,16 +29,12 @@ export function ValidarId(listaArticulo, id) {
         return false
     }
 }
-export function ValidarEditarArticulo(listaArticulo, nombre, cantidad, categoria,busqueda) {
-    const arrayNombre = listaArticulo.map(elemento => elemento.props.nombre === nombre)
+export function ValidarEditarArticulo(listaArticulo,cantidad, busqueda) {
     const arrayBusqueda = listaArticulo.map(elemento=>elemento.props.nombre == busqueda)
-    const arrayCat = listaArticulo.map(elemento => elemento.props.categoria === categoria)
-    const validacionNombre = arrayNombre.includes(true)
     const validacionBusqueda = arrayBusqueda.includes(true)
-    const validacionCat = arrayCat.includes(true)
     const nombreValido = validarSoloLetras(nombre)
     const numeroValido = esNumerico(cantidad)
-    if (validacionNombre == false && validacionCat == true && nombreValido == true && numeroValido == true && validacionBusqueda == true) {
+    if (nombreValido == true && numeroValido == true && validacionBusqueda == true) {
         return true
     } else {
         return false

@@ -14,7 +14,8 @@ import { Lit } from "@/components/li";
 export default function Inventario() {
   const [listaSelect, setListaSelect] = useState([])
   const agregarSelect = () => {
-    const componente = <Lit lista={listaArticulo}></Lit>
+    console.log(listaSelect.length)
+    const componente = <Lit lista={listaArticulo} function={change} id={listaSelect.length}></Lit>
     setListaSelect([...listaSelect, componente])
   }
   const [listaPrestamos, setListaPrestamos] = useState([])
@@ -38,16 +39,16 @@ export default function Inventario() {
       prestador="hola"
       FechaPrestado="hola"
       IDprestamo="Hola"
-      Activo= {true}
+      Activo={true}
     />
     const prestamo2 = <Prestamo
       profesor="hola2"
       prestador="hola2"
       FechaPrestado="hola2"
       IDprestamo="Hola"
-      Activo= {true}
+      Activo={true}
     />
-    const array = [prestamo,prestamo2]
+    const array = [prestamo, prestamo2]
     setListaPrestamos([...listaPrestamos, ...array])
   }, [])
   useEffect(() => {
@@ -292,7 +293,7 @@ export default function Inventario() {
     const categoria = document.getElementById("inputcategoria").value
     const cantidad = document.getElementById("inputcantidad").value
     const busqueda = document.getElementById("busqueda").value
-    const valido = Validaciones.ValidarEditarArticulo(listaArticulo, nombre, cantidad, categoria, busqueda)
+    const valido = Validaciones.ValidarEditarArticulo(listaArticulo, cantidad, busqueda)
     if (valido == true) {
       try {
         const id = document.getElementById("inputid").value
@@ -562,6 +563,12 @@ export default function Inventario() {
   const modo = () => {
     setTema(!tema)
   }
+  const agregarPrestamo = () => {
+    console.log(listaPrestamos[0].selectedValue)
+  }
+  const change = (key) => {
+    console.log(key)
+  }
   //=====================================Return=======================================================//
   return (
     <div>
@@ -596,6 +603,7 @@ export default function Inventario() {
             <div className="contenedor3">
               <div className={tema ? 'modal-overlay-white' : 'modal-overlay'}>
                 <div className="close-button" onClick={() => closeModal()} />
+                <h1 id="" className="H1">Agregar Articulo</h1>
                 <h1 id="H1 hidden" className="escondido" hidden={true}>Articulo Invalido</h1>
                 <input type="text" placeholder="Nombre" id="nombre" className={tema ? 'inputt-white' : 'inputt'} />
                 <h3 className="h3">Categoria</h3>
@@ -614,54 +622,65 @@ export default function Inventario() {
             <div className="contenedor3">
               <div className={tema ? 'modal-overlay2-white' : 'modal-overlay2'}>
                 <div className="close-button" onClick={() => closeModal6()} />
-                <h1 id="H2 hidden" className="escondido2" hidden={true}>Articulo no encontrado</h1>
-                <h1 id="H1 hidden" className="escondido2" hidden={true}>Articulo Invalido</h1>
-                <h1 className="h1">Ingrese el nombre</h1>
-                <input
-                  type="search"
-                  className={tema ? 'inputt-white' : 'inputt'}
-                  placeholder="Busqueda"
-                  onChange={cambios}
-                  onKeyDown={apretarTecla}
-                  ref={inputRef}
-                  id="busqueda"
-                  onBlur={SeleccionarArticulo} />
-                <select name="" className={tema ? 'selec-white' : 'selec'} id="select" onChange={SeleccionarArticulo}>
-                  {select.map((elemento) =>
-                    <option key={elemento.id} value={elemento.nombre} >{elemento.nombre}</option>)}
-                </select>
-                <h1 className="h1">Articulo</h1>
-                <input type="text" id="inputnombre" className={tema ? 'inputt-white' : 'inputt'} placeholder="Nombre" />
-                <input type="text" id="inputid" hidden />
-                <h3 className="h3">Categoria</h3>
-                <select name="" className={tema ? 'selec-white' : 'selec'} id="inputcategoria">
-                  {listaCat.map((elemento) => (
-                    <option key={elemento.props.nombre} value={elemento.props.nombre}>
-                      {elemento.props.nombre}
-                    </option>))}
-                </select>
-                <input type="number" id="inputcantidad" className={tema ? 'inputt-white' : 'inputt'} placeholder="Cantidad" onKeyPress={handleKeyPress} />
-                <button className="botonto" onClick={ActualizarArticulo}>Actualizar</button>
+                <div className="content">
+                  <h1 className="H1">Actualizar Articulo</h1>
+                  <h1 id="H2 hidden" className="escondido2" hidden={true}>Articulo no encontrado</h1>
+                  <h1 id="H1 hidden" className="escondido2" hidden={true}>Articulo Invalido</h1>
+                  <h1 className="h1">Ingrese el nombre</h1>
+                  <input
+                    type="search"
+                    className={tema ? 'inputt-white' : 'inputt'}
+                    placeholder="Busqueda"
+                    onChange={cambios}
+                    onKeyDown={apretarTecla}
+                    ref={inputRef}
+                    id="busqueda"
+                    onBlur={SeleccionarArticulo} />
+                  <select name="" className={tema ? 'selec-white' : 'selec'} id="select" onChange={SeleccionarArticulo}>
+                    {select.map((elemento) =>
+                      <option key={elemento.id} value={elemento.nombre} >{elemento.nombre}</option>)}
+                  </select>
+                </div>
+                <div className="content">
+
+                  <h1 className="h1">Articulo</h1>
+                  <input type="text" id="inputnombre" className={tema ? 'inputt-white' : 'inputt'} placeholder="Nombre" />
+                  <input type="text" id="inputid" hidden />
+                  <h3 className="h3">Categoria</h3>
+                  <select name="" className={tema ? 'selec-white' : 'selec'} id="inputcategoria">
+                    {listaCat.map((elemento) => (
+                      <option key={elemento.props.nombre} value={elemento.props.nombre}>
+                        {elemento.props.nombre}
+                      </option>))}
+                  </select>
+                  <input type="number" id="inputcantidad" className={tema ? 'inputt-white' : 'inputt'} placeholder="Cantidad" onKeyPress={handleKeyPress} />
+                  <button className="botonto" onClick={ActualizarArticulo}>Actualizar</button>
+                </div>
               </div>
             </div>)}
           {modalOpen9 && (
             <div className="contenedor3">
-              <div className={tema ? 'modal-overlay-prestamo-white' : 'modal-overlay-prestamo'}>
-                <div className="close-buttonCONT3" onClick={() => closeModal9()} />
-                <h1 className="h1">Prestamo</h1>
-                <div className="agregar" onClick={agregarSelect}></div>
-                <h1 className="h2">Articulos</h1>
-                <div className="contSelector">
-                  {listaSelect.map((element) => (
-                    <div key={1}>
-                      {element}
-                    </div>
-                  ))}
+              <div className={tema ? 'modal-overlay2-white' : 'modal-overlay2'}>
+                <div className="close-button" onClick={() => closeModal9()} />
+                <div className="content">
+
+                  <h1 className="H1">Prestamo</h1>
+                  <div className="agregar" onClick={agregarSelect}></div>
+                  <h1 className="h1">Articulos</h1>
+                  <div className="contSelector">
+                    {listaSelect.map((element,index) => (
+                      <div key={index} className="divSelec">
+                        {element}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <input type="text" className="inputt" placeholder="Profesor" />
-                <input type="text" className="inputt" placeholder="Curso" />
-                <input type="time" name="" id="" className="inputt" />
-                <button className="botonto">Agregar</button>
+                <div className="content">
+                  <input type="text" className="inputt" placeholder="Profesor" />
+                  <input type="text" className="inputt" placeholder="Curso" />
+                  <input type="time" name="" id="" className="inputt" />
+                  <button className="botonto" onClick={agregarPrestamo}>Agregar</button>
+                </div>
               </div>
             </div>)}
           {modalOpen2 && (
@@ -669,6 +688,7 @@ export default function Inventario() {
               <div className={tema ? 'modal-overlay-white' : 'modal-overlay'}>
                 <div className="close-button" onClick={() => closeModal2()} />
                 <div className="modal-content">
+                  <h1 className="H1">Agregar Categoria</h1>
                   <h1 className="escondido" hidden={true} id="H1 hidden">Nombre Invaldio</h1>
                   <input type="text" placeholder="Nombre" id="nombre" className={tema ? 'inputt-white' : 'inputt'} />
                   <button className="botonto" onClick={AgregarCat}>Agregar</button>
@@ -681,6 +701,7 @@ export default function Inventario() {
                 <div className="close-button" onClick={() => closeModal5()} />
                 <h1 className="escondido" id="H1 hidden" hidden={true}>Nombre invalido</h1>
                 <div className="modal-content">
+                  <h1 className="H1">Editar Categoria</h1>
                   <input type="text" placeholder="Viejo" id="nombre" className={tema ? 'inputt-white' : 'inputt'} />
                   <input type="text" placeholder="Nuevo" id="nuevo" className={tema ? 'inputt-white' : 'inputt'} />
                   <button className="botonto" onClick={ActualizarCat}>Actualizar</button>
@@ -691,6 +712,7 @@ export default function Inventario() {
             <div className="contenedor3">
               <div className={tema ? 'modal-overlay-white' : 'modal-overlay'}>
                 <div className="close-button" onClick={() => closeModal3()} />
+                <h1 className="H1">Borrar Categoria</h1>
                 <h1 className="escondido" id="H1 hidden" hidden={true}>Categoria no encontrado</h1>
                 <div className="modal-content">
                   <input type="text" placeholder="Nombre" id="borrar" className={tema ? 'inputt-white' : 'inputt'} />
@@ -703,6 +725,7 @@ export default function Inventario() {
               <div className={tema ? 'modal-overlay-white' : 'modal-overlay'}>
                 <div className="close-button" onClick={() => closeModal7()} />
                 <div className="modal-content">
+                  <h1 className="H1">Borrar Articulo</h1>
                   <h1 className="escondido" id="H1 hidden" hidden={true}>ID invalido</h1>
                   <input type="number" placeholder="ID" id="borrar" className={tema ? 'inputt-white' : 'inputt'} onKeyPress={handleKeyPress} />
                   <button className="botonto" onClick={BorrarArticulo}>Eliminar</button>
@@ -732,7 +755,7 @@ export default function Inventario() {
               <div className={tema ? 'botoncabe2-white' : 'botoncabe2'} id="botoncabe2" onClick={openModal7} />
               <div className={tema ? 'botoncabe3-white' : 'botoncabe3'} id="botoncabe3" onClick={openModal6} />
               <div className={tema ? 'botoncabe4-white' : 'botoncabe4'} id="botoncabe4" onClick={openModal9} />
-              <div className={tema ? 'botoncabe5-white' : 'botoncabe5'} id="botoncabe5" onClick={() => {setMostrarPrestamo(!mostrarPrestamo); setMostarList(false)}} />
+              <div className={tema ? 'botoncabe5-white' : 'botoncabe5'} id="botoncabe5" onClick={() => { setMostrarPrestamo(!mostrarPrestamo); setMostarList(false) }} />
 
 
             </div>
@@ -778,7 +801,7 @@ export default function Inventario() {
                           <td className="lista2">Prestador</td>
                           <td className="lista2">Profesor</td>
                           <td className="lista2">Fecha</td>
-                          <td className="lista2">Activo</td>                          
+                          <td className="lista2">Activo</td>
                         </tr>
                         {!mostarLista && listaPrestamos}
                         {mostarLista && artFiltrado}
