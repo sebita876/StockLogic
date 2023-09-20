@@ -506,7 +506,7 @@ export default function Inventario() {
       }
     } else {
       var resultado = listaPrestamos.filter((elemento) => {
-        if (elemento.props.articulo.toString().toLowerCase().includes(params.toLowerCase())) {
+        if (elemento.props.profesor.toString().toLowerCase().includes(params.toLowerCase())) {
           return elemento
         }
       })
@@ -545,12 +545,12 @@ export default function Inventario() {
       setMostarList(true)
       if (valor == "a-z") {
         const filtrador = [...listaPrestamos].sort((a, b) => {
-          return a.props.articulo.localeCompare(b.props.articulo)
+          return a.props.profesor.localeCompare(b.props.profesor)
         })
         setArtFiltrado(filtrador)
       } else if (valor == "z-a") {
         const filtrador = [...listaPrestamos].sort((a, b) => {
-          return b.props.articulo.localeCompare(a.props.articulo)
+          return b.props.profesor.localeCompare(a.props.profesor)
         })
         setArtFiltrado(filtrador)
       } else {
@@ -564,10 +564,23 @@ export default function Inventario() {
     setTema(!tema)
   }
   const agregarPrestamo = () => {
-    console.log(listaPrestamos[0].selectedValue)
+    console.log(articulosPrestados)
   }
+  const [articulosPrestados, setArticulosPrestados] = useState ([])
   const change = (key) => {
-    console.log(key)
+    const art = document.getElementById(key).value
+    const cant = document.getElementById("input" + key).value
+    const arrayPrestados = articulosPrestados
+    const index = arrayPrestados.findIndex((element)=>element == art)
+    if ( index == -1){
+      console.log("if")
+      setArticulosPrestados([...articulosPrestados,art,cant])
+      console.log(articulosPrestados)
+    }else{
+      console.log("else")
+      articulosPrestados[index + 1] = cant
+      console.log(articulosPrestados)
+    }
   }
   //=====================================Return=======================================================//
   return (
@@ -796,7 +809,6 @@ export default function Inventario() {
                     )}
                     {mostrarPrestamo && (
                       <>
-
                         <tr>
                           <td className="lista2">Prestador</td>
                           <td className="lista2">Profesor</td>
