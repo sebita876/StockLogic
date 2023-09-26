@@ -627,8 +627,9 @@ export default function Inventario() {
       const resta = length - 1;
       const objeto = listaPrestamos[resta];
       const props = objeto.props.id;
-      id = props + 1;
+      id = parseInt(props) + 1;
     }
+    console.log(id)
     const profesor = document.getElementById("Prof").value;
     const curso = document.getElementById("Curso").value;
     const hora = document.getElementById("Hora").value;
@@ -652,7 +653,8 @@ export default function Inventario() {
         cantidad: elemento.cantidad,
         fecha: funcion(),
         id: id
-      }));
+      })
+      );
       const newComponent = <Prestamo
         profesor={profesor}
         hora={hora}
@@ -684,7 +686,7 @@ export default function Inventario() {
     const art = document.getElementById(key).value
     const cant = document.getElementById("input" + key).value
     const indexArticulo = listaArticulo.findIndex((element) => element.props.nombre == art)
-    const cantidadArticulos = listaArticulo[indexArticulo].props.cantidad
+    const cantidadArticulos = listaArticulo[indexArticulo].props.disponible
     if (cant <= cantidadArticulos) {
       document.getElementById("close" + key).hidden = false
       document.getElementById("boton" + key).style.backgroundColor = "#005747"

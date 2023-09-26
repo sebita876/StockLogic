@@ -28,7 +28,7 @@ const herramientasSchema = new mongoose.Schema({
   },
   disponible: {
     type: Number,
-    require: true
+    require: false
   }
 });
 const Herramienta = mongoose.models.Herramienta || mongoose.model('Herramienta', herramientasSchema);

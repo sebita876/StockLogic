@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Factura } from "./factura"
+import axios from "axios"
 
 export function Prestamo(props) {
     const [Activo, setActivo] = useState(props.Activo)
@@ -7,10 +8,25 @@ export function Prestamo(props) {
     const HandleClickFactura = () => {
         setFactura(true)
     }
-    const HandleClickDevuelto = () => {
-        setActivo(false)
+    const funcion = () => {
+        const today = new Date();
+        const hours = today.getHours();
+        const minutes = today.getMinutes();
+
+        // Formatear la hora y los minutos como una cadena en el formato deseado
+        const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
+        return formattedTime;
     }
-    const cerrar = () =>{
+
+    const HandleClickDevuelto = async () => {
+        setActivo(funcion())
+        await axios.put('/api/prestamos/[id]', {
+            id: props.id,
+            fecha: funcion()
+        })
+    }
+    const cerrar = () => {
         setFactura(false)
     }
     return <tr key={props.key}>
@@ -24,14 +40,14 @@ export function Prestamo(props) {
         )}
         <button onClick={() => HandleClickFactura()}>Factura</button>
         {factura && (
-            <Factura 
-            profesor={props.profesor}
-            curso={props.curso}
-            prestador={props.prestador}
-            fecha={props.fecha}
-            id={props.id}
-            articulos={props.articulos}
-            funcion={cerrar}
+            <Factura
+                profesor={props.profesor}
+                curso={props.curso}
+                prestador={props.prestador}
+                fecha={props.fecha}
+                id={props.id}
+                articulos={props.articulos}
+                funcion={cerrar}
             />
         )}
     </tr>
