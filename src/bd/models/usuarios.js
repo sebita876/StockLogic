@@ -4,14 +4,11 @@ const usuariosSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-
-    admin: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
-
     contraseña: {
+        type: String,
+        required: true
+    },
+    nombre: {
         type: String,
         required: true
     }

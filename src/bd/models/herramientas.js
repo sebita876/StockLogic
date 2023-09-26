@@ -25,6 +25,10 @@ const herramientasSchema = new mongoose.Schema({
   cantidad: {
     type: Number,
     require: true
+  },
+  disponible: {
+    type: Number,
+    require: true
   }
 });
 const Herramienta = mongoose.models.Herramienta || mongoose.model('Herramienta', herramientasSchema);

@@ -11,8 +11,8 @@ export async function GET(req, res) {
 export async function POST(request) {
   try {
     const requesData = await request.json()
-    const { nombre, cantidad, id, categoria } = requesData
-    const nuevaHerramienta = new Herramienta({ nombre, cantidad, id, categoria });
+    const { nombre, cantidad, id, categoria, disponible } = requesData
+    const nuevaHerramienta = new Herramienta({ nombre, cantidad, id, categoria, disponible });
     await nuevaHerramienta.save();
     console.log('Guardado exitosamente');
     return NextResponse.json({ status: 200, message: 'Guardado exitosamente', data: nuevaHerramienta })

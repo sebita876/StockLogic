@@ -12,8 +12,8 @@ export async function GET(req, res) {
 export async function POST(request) {
   try {
     const requesData = await request.json()
-    const { nombre, cantidad, id, categoria } = requesData
-    const nuevaPrestamo = new Prestamo({ nombre, cantidad, id, categoria });
+    const { profesor, curso, hora, usuario, articulo, cantidad, fecha, id } = requesData
+    const nuevaPrestamo = new Prestamo({ profesor, curso, hora, usuario, articulo, cantidad, fecha, id });
     await nuevaPrestamo.save();
     console.log('Guardado exitosamente');
     return NextResponse.json({ status: 200, message: 'Guardado exitosamente', data: nuevaPrestamo })

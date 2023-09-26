@@ -6,8 +6,9 @@ import { useEffect, useState } from "react";
 export default function Base() {
     const [listaUsuarios, setListaUsuarios] = useState([])
     const validarInicio = async (user, pass, router) => {
-        const array = listaUsuarios.map(elemento => elemento.dni == user && elemento.contraseña == pass);
-        const validar = array.includes(true)
+        let array, validar
+            array = listaUsuarios.map(elemento => elemento.dni == user && elemento.contraseña == pass);
+            validar = array.includes(true)
         if (validar == true) {
             document.getElementById("boton1").style.cursor = "not-allowed"
             document.getElementById("boton2").style.cursor = "not-allowed"
@@ -15,7 +16,10 @@ export default function Base() {
             document.getElementById("boton2").style.backgroundColor = "#005747"
             document.getElementById("boton1").disabled = true
             document.getElementById("boton2").disabled = true
-            setCookie(null, "isLogged", "true", {
+            const index = listaUsuarios.findIndex((elemento)=> elemento.dni == user)
+            const nombre = listaUsuarios[index].nombre
+            console.log(nombre)
+            setCookie(null, "isLogged", nombre, {
                 maxAge: 3600,
                 path: "/",
             });
@@ -29,12 +33,10 @@ export default function Base() {
     }
     const traerUsuarios = async () => {
         const lista = await axios.get('/api/usuarios')
-        console.log(lista)
         setListaUsuarios(lista.data.datos)
-        console.log(listaUsuarios)
     }
     useEffect(() => {
-            traerUsuarios()
+        traerUsuarios()
     }, [])
     const router = useRouter()
     const handleClick = async () => {

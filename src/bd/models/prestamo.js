@@ -13,12 +13,12 @@ const prestamoSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    alumno: {
+    usuario: {
         type: String,
         require: true
     },
     articulo: {
-        type: Number,
+        type: String,
         require: true
     },
     cantidad: {
@@ -33,6 +33,14 @@ const prestamoSchema = new mongoose.Schema({
             today.setHours(0, 0, 0, 0);
             return today.toLocaleDateString();
         }
+    },
+    id: {
+        type: Number,
+        require: true
+    },
+    fechaDev: {
+        type: String,
+        require: false
     }
 });
 const Prestamo = mongoose.models.Prestamo || mongoose.model('Prestamo', prestamoSchema);

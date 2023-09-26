@@ -9,15 +9,22 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Loading from "./loading";
 import { Prestamo } from "@/components/prestamo";
 import { Lit } from "@/components/li";
-
+import { parseCookies } from "nookies";
 
 export default function Inventario() {
+  const cookie = parseCookies()
   const [listaSelect, setListaSelect] = useState([])
   const agregarSelect = () => {
-    console.log(listaSelect.length)
-    const componente = <Lit lista={listaArticulo} function={change} id={listaSelect.length}></Lit>
+    const componente = <Lit
+      lista={listaArticulo}
+      function={change}
+      function2={eliminarSelect}
+      id={listaSelect.length}
+      state={listaSelectBien}
+    />
     setListaSelect([...listaSelect, componente])
   }
+  const [articulosPrestados, setArticulosPrestados] = useState([])
   const [listaPrestamos, setListaPrestamos] = useState([])
   const [mostarLista, setMostarList] = useState(false)
   const [articulos, setArticulos] = useState([])
@@ -27,30 +34,21 @@ export default function Inventario() {
   const [busquedaArt, setBusquedaArt] = useState("")
   const [select, setSelect] = useState([])
   let [listaCat, setListaCat] = useState([])
-  let listaArtBien
   useEffect(() => {
     const init = async () => {
       await TraerArticulos()
       await TraerCat()
     }
     init()
-    const prestamo = <Prestamo
-      profesor="hola"
-      prestador="hola"
-      FechaPrestado="hola"
-      IDprestamo="Hola"
-      Activo={true}
-    />
-    const prestamo2 = <Prestamo
-      profesor="hola2"
-      prestador="hola2"
-      FechaPrestado="hola2"
-      IDprestamo="Hola"
-      Activo={true}
-    />
-    const array = [prestamo, prestamo2]
-    setListaPrestamos([...listaPrestamos, ...array])
   }, [])
+  const [articulosPrestadosBien, setArticulosPrestadosBien] = useState([])
+  const [listaSelectBien, setlistaSelectBien] = useState([])
+  useEffect(() => {
+    setArticulosPrestadosBien([...articulosPrestadosBien, ...articulosPrestados])
+  }, [articulosPrestados])
+  useEffect(() => {
+    setlistaSelectBien([...listaSelectBien, ...listaSelect])
+  }, [listaSelect])
   useEffect(() => {
     const init = async () => {
       if (listaArticulo.length !== 0) {
@@ -226,6 +224,7 @@ export default function Inventario() {
         id={id}
         categoria={categoria}
         cantidad={cantidad}
+        disponible={cantidad}
       />
       setListaArticulo([...listaArticulo, newComponent])
       GuardarArticulo(nombre.toLowerCase(), id, categoria, cantidad);
@@ -241,7 +240,8 @@ export default function Inventario() {
         nombre: nombre,
         id: id,
         categoria: categoria,
-        cantidad: cantidad
+        cantidad: cantidad,
+        disponible: cantidad
       })
         .then(data => console.log('guardao'))
     } catch (error) {
@@ -260,7 +260,8 @@ export default function Inventario() {
             fecha={dato.fecha}
             id={dato.id}
             categoria={dato.categoria}
-            cantidad={dato.cantidad} />))
+            cantidad={dato.cantidad}
+            disponible={dato.disponible} />))
         setListaArticulo([...listaArticulo, ...newComponent])
       })
     } catch (error) {
@@ -314,6 +315,7 @@ export default function Inventario() {
           id={id}
           categoria={categoria}
           cantidad={cantidad}
+          disponible={cantidad}
         />
         copia[indice] = componente
         setListaArticulo(copia)
@@ -563,23 +565,94 @@ export default function Inventario() {
   const modo = () => {
     setTema(!tema)
   }
+
   const agregarPrestamo = () => {
-    console.log(articulosPrestados)
+    let id;
+    const length = listaPrestamos.length;
+
+    if (length === 0) {
+      id = 1;
+    } else {
+      const resta = length - 1;
+      const objeto = listaPrestamos[resta];
+      const props = objeto.props.id;
+      id = props + 1;
+    }
+    const profesor = document.getElementById("Prof").value;
+    const curso = document.getElementById("Curso").value;
+    const hora = document.getElementById("Hora").value;
+    const cantidades = {};
+    const articulosPrestadosFiltrados = articulosPrestadosBien.filter((elemento) => {
+      const { articulo, cantidad } = elemento;
+      if (cantidades[articulo]) {
+        cantidades[articulo] = cantidad;
+        return false;
+      }
+      cantidades[articulo] = cantidad;
+      return true;
+    });
+    try {
+      const data = articulosPrestadosFiltrados.map(async (elemento) => await axios.post('/api/prestamos', {
+        profesor: profesor,
+        curso: curso,
+        hora: hora,
+        usuario: cookie.isLogged,
+        articulo: elemento.articulo,
+        cantidad: elemento.cantidad,
+        fecha: funcion(),
+        id: id
+      }));
+      const newComponent = <Prestamo
+        profesor={profesor}
+        curso={curso}
+        prestador={cookie.isLogged}
+        fecha={funcion()}
+        id={id}
+        articulos={articulosPrestadosFiltrados}
+        Activo={true}
+      />
+      setListaPrestamos([...listaPrestamos, newComponent])
+      closeModal9()
+    } catch {
+      console.log("error");
+    }
   }
-  const [articulosPrestados, setArticulosPrestados] = useState ([])
+  const eliminarSelect = (key,state) => {
+    console.log("eliminar",state)
+    const index = state.findIndex((element) => element.props.id == key);
+    const copia = [...state];
+    copia.splice(index, 1);
+    setListaSelect(copia);
+}
   const change = (key) => {
     const art = document.getElementById(key).value
     const cant = document.getElementById("input" + key).value
-    const arrayPrestados = articulosPrestados
-    const index = arrayPrestados.findIndex((element)=>element == art)
-    if ( index == -1){
-      console.log("if")
-      setArticulosPrestados([...articulosPrestados,art,cant])
-      console.log(articulosPrestados)
-    }else{
-      console.log("else")
-      articulosPrestados[index + 1] = cant
-      console.log(articulosPrestados)
+    const indexArticulo = listaArticulo.findIndex((element) => element.props.nombre == art)
+    const cantidadArticulos = listaArticulo[indexArticulo].props.cantidad
+    if (cant <= cantidadArticulos) {
+      document.getElementById("close" + key).hidden = false
+      document.getElementById("boton" + key).style.backgroundColor = "#005747"
+      document.getElementById("boton" + key).style.cursor = "not-allowed"
+      document.getElementById("boton" + key).disabled = true
+      document.getElementById("h1" + key).hidden = true
+      document.getElementById("h2" + key).hidden = true
+      const objeto = {
+        articulo: art,
+        cantidad: cant
+      }
+      const index = articulosPrestadosBien.findIndex((element) => element.articulo === art)
+      if (index == -1) {
+        setArticulosPrestados([...articulosPrestados, { ...objeto }])
+      } else {
+        setArticulosPrestados((prevState) => {
+          const updatedArticulos = [...prevState];
+          updatedArticulos[index].cantidad = cant;
+          return updatedArticulos;
+        })
+      }
+    } else {
+      document.getElementById("h1" + key).hidden = false
+      document.getElementById("h2" + key).hidden = false
     }
   }
   //=====================================Return=======================================================//
@@ -681,7 +754,7 @@ export default function Inventario() {
                   <div className="agregar" onClick={agregarSelect}></div>
                   <h1 className="h1">Articulos</h1>
                   <div className="contSelector">
-                    {listaSelect.map((element,index) => (
+                    {listaSelect.map((element, index) => (
                       <div key={index} className="divSelec">
                         {element}
                       </div>
@@ -689,9 +762,9 @@ export default function Inventario() {
                   </div>
                 </div>
                 <div className="content">
-                  <input type="text" className="inputt" placeholder="Profesor" />
-                  <input type="text" className="inputt" placeholder="Curso" />
-                  <input type="time" name="" id="" className="inputt" />
+                  <input type="text" className="inputt" placeholder="Profesor" id="Prof" />
+                  <input type="text" className="inputt" placeholder="Curso" id="Curso" />
+                  <input type="time" name="" className="inputt" id="Hora" />
                   <button className="botonto" onClick={agregarPrestamo}>Agregar</button>
                 </div>
               </div>
@@ -802,6 +875,7 @@ export default function Inventario() {
                           <td className="lista">ID</td>
                           <td className="lista">Categoria</td>
                           <td className="lista">Cantidad</td>
+                          <td className="lista">Disponibles</td>
                         </tr>
                         {!mostarLista && listaArticulo}
                         {mostarLista && artFiltrado}

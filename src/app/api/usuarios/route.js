@@ -12,7 +12,7 @@ export async function POST(req) {
     try {
         await Conectar()
         const requesData = await req.json()
-        const nuevoUsuario = new Usuarios({ dni: requesData.dni, contraseña: requesData.contraseña, admin: requesData.admin });
+        const nuevoUsuario = new Usuarios({ dni: requesData.dni, contraseña: requesData.contraseña, nombre: requesData.nombre });
         await nuevoUsuario.save();
         return NextResponse.json({ status: 200, message: 'Guardado exitosamente', data: nuevoUsuario })
     } catch (error) {
