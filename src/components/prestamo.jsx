@@ -5,9 +5,7 @@ export function Prestamo(props) {
     const [Activo, setActivo] = useState(props.Activo)
     const [factura, setFactura] = useState(false)
     const HandleClickFactura = () => {
-        if (factura == false) {
-            setFactura(true)
-        }
+        setFactura(true)
     }
     const HandleClickDevuelto = () => {
         setActivo(false)
@@ -19,7 +17,8 @@ export function Prestamo(props) {
         <td className="lista2">{props.prestador}</td>
         <td className="lista2">{props.profesor}</td>
         <td className="lista2">{props.fecha}</td>
-        <td className="lista2">{Activo.toString()}</td>
+        <td className="lista2">{props.hora}</td>
+        <td className="lista2">{Activo}</td>
         {Activo && (
             <button onClick={() => HandleClickDevuelto()}>Devuelto</button>
         )}

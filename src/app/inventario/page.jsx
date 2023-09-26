@@ -13,14 +13,25 @@ import { parseCookies } from "nookies";
 
 export default function Inventario() {
   const cookie = parseCookies()
-  const [listaSelect, setListaSelect] = useState([])
+  let [listaSelect, setListaSelect] = useState([])
   const agregarSelect = () => {
+    let id = 0
+    const length = listaSelect.length
+    if (length == 0) {
+      id = 1
+    }
+    else {
+      const resta = listaSelect.length - 1
+      const objeto = listaSelect[resta]
+      const props = objeto.props.id
+      id = props + 1
+    }
     const componente = <Lit
       lista={listaArticulo}
       function={change}
       function2={eliminarSelect}
-      id={listaSelect.length}
-      state={listaSelectBien}
+      id={id}
+      state={listaSelect}
     />
     setListaSelect([...listaSelect, componente])
   }
@@ -37,18 +48,15 @@ export default function Inventario() {
   useEffect(() => {
     const init = async () => {
       await TraerArticulos()
+      await traerPrestamos()
       await TraerCat()
     }
     init()
   }, [])
   const [articulosPrestadosBien, setArticulosPrestadosBien] = useState([])
-  const [listaSelectBien, setlistaSelectBien] = useState([])
   useEffect(() => {
     setArticulosPrestadosBien([...articulosPrestadosBien, ...articulosPrestados])
   }, [articulosPrestados])
-  useEffect(() => {
-    setlistaSelectBien([...listaSelectBien, ...listaSelect])
-  }, [listaSelect])
   useEffect(() => {
     const init = async () => {
       if (listaArticulo.length !== 0) {
@@ -63,6 +71,21 @@ export default function Inventario() {
   useEffect(() => {
     listaCatBien = listaCat
   }, [listaCat])
+  const [copia, setCopia] = useState([])
+  useEffect(() => {
+    const componentes = listaSelect.map((element, index) => (
+      <Lit
+        key={element.props.id}
+        lista={listaArticulo}
+        function={change}
+        function2={eliminarSelect}
+        id={element.props.id}
+        state={listaSelect}
+      />
+    ))
+    console.log("effect Componentes", componentes)
+    setCopia(componentes)
+  }, [listaSelect])
   useEffect(() => {
   }, [mostarLista])
   useEffect(() => {
@@ -174,22 +197,50 @@ export default function Inventario() {
     setModalOpenAyuda(!modalOpenAyuda)
   }
   //_______________________________________________PRESTAMOS_______________________________________________//
-  const traerPrestamos = async () => {
-    const prestamo = await axios.get('/api/prestamo').then(res => {
-      const lista = res.data.datos
-      const newComponent = lista.map(dato => (
-        <Prestamo
-          key={dato.id}
-          profesor={dato.profesor}
-          curso={dato.curso}
-          hora={dato.hora}
-          alumno={dato.alumno}
-          articulo={dato.articulo}
-          cantidad={dato.cantidad}
-          prestador={dato.prestador} />))
-      setListaPrestamos([...listaPrestamos, ...newComponent])
-    })
+  const prueba = (fechaDev) => {
+    if (fechaDev === undefined) {
+      return " -"
+    } else {
+      return fechaDev
+    }
   }
+  const traerPrestamos = async () => {
+    try {
+      const res = await axios.get('/api/prestamos');
+      const lista = res.data.datos;
+  
+      const groupedById = {};
+  
+      lista.forEach((dato) => {
+        const { id, articulo, cantidad, profesor, curso, hora, usuario, fecha, fechaDev } = dato;
+  
+        if (!groupedById[id]) {
+          groupedById[id] = [];
+        }
+  
+        groupedById[id].push({ articulo, cantidad, profesor, curso, hora, usuario, fecha, fechaDev });
+      });
+  
+      const newComponents = Object.entries(groupedById).map(([id, elementos]) => (
+        <Prestamo
+          key={id}
+          id={id}
+          articulos={elementos}
+          profesor={elementos[0].profesor}
+          curso={elementos[0].curso}
+          hora={elementos[0].hora}
+          prestador={elementos[0].usuario}
+          fecha={elementos[0].fecha}
+          Activo={prueba(elementos[0].fechaDev)}
+        />
+      ));
+  
+      setListaPrestamos([...listaPrestamos, ...newComponents]);
+    } catch (error) {
+      console.error('Error al obtener los prestamos:', error);
+    }
+  }
+
   //_______________________________________________ARTICULO_________________________________________________//
   const funcion = () => {
     const today = new Date();
@@ -604,26 +655,31 @@ export default function Inventario() {
       }));
       const newComponent = <Prestamo
         profesor={profesor}
+        hora={hora}
         curso={curso}
         prestador={cookie.isLogged}
         fecha={funcion()}
         id={id}
         articulos={articulosPrestadosFiltrados}
-        Activo={true}
+        Activo="-"
       />
       setListaPrestamos([...listaPrestamos, newComponent])
+      setArticulosPrestados([])
+      setArticulosPrestadosBien([])
+      setListaSelect([])
       closeModal9()
     } catch {
       console.log("error");
     }
   }
-  const eliminarSelect = (key,state) => {
-    console.log("eliminar",state)
-    const index = state.findIndex((element) => element.props.id == key);
-    const copia = [...state];
-    copia.splice(index, 1);
-    setListaSelect(copia);
-}
+  const eliminarSelect = async (key) => {
+    const index = listaSelect.findIndex((element) => element.props.id == key);
+    const copi = [...listaSelect];
+    console.log("copia antes", copi)
+    copi.splice(index, 1);
+    console.log("copia despues", copi)
+    setListaSelect(copi);
+  }
   const change = (key) => {
     const art = document.getElementById(key).value
     const cant = document.getElementById("input" + key).value
@@ -641,15 +697,7 @@ export default function Inventario() {
         cantidad: cant
       }
       const index = articulosPrestadosBien.findIndex((element) => element.articulo === art)
-      if (index == -1) {
-        setArticulosPrestados([...articulosPrestados, { ...objeto }])
-      } else {
-        setArticulosPrestados((prevState) => {
-          const updatedArticulos = [...prevState];
-          updatedArticulos[index].cantidad = cant;
-          return updatedArticulos;
-        })
-      }
+      setArticulosPrestados([...articulosPrestados, { ...objeto }])
     } else {
       document.getElementById("h1" + key).hidden = false
       document.getElementById("h2" + key).hidden = false
@@ -754,10 +802,8 @@ export default function Inventario() {
                   <div className="agregar" onClick={agregarSelect}></div>
                   <h1 className="h1">Articulos</h1>
                   <div className="contSelector">
-                    {listaSelect.map((element, index) => (
-                      <div key={index} className="divSelec">
-                        {element}
-                      </div>
+                    {copia.map((componente, index) => (
+                      <div className="divSelec" key={index}>{componente}</div>
                     ))}
                   </div>
                 </div>
@@ -887,7 +933,8 @@ export default function Inventario() {
                           <td className="lista2">Prestador</td>
                           <td className="lista2">Profesor</td>
                           <td className="lista2">Fecha</td>
-                          <td className="lista2">Activo</td>
+                          <td className="lista2">Hora Dev</td>
+                          <td className="lista2">Devuelto</td>
                         </tr>
                         {!mostarLista && listaPrestamos}
                         {mostarLista && artFiltrado}

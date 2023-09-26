@@ -5,8 +5,8 @@ import Prestamo from '@/bd/models/prestamo';
 
 export async function GET(req, res) {
   await Conectar()
-  const Prestamo = await Prestamo.find();
-  return NextResponse.json({ status: 200, message: 'Prestamo', datos: Prestamo })
+  const Prestamos = await Prestamo.find();
+  return NextResponse.json({ status: 200, message: 'Prestamo', datos: Prestamos })
 }
 
 export async function POST(request) {
