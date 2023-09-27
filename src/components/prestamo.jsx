@@ -1,9 +1,15 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Factura } from "./factura"
 import axios from "axios"
 
 export function Prestamo(props) {
     const [Activo, setActivo] = useState(props.Activo)
+    const [text, setText] = useState("-")
+    useEffect(() => {
+        if (props.fechaDev != undefined) {
+            setText(props.fechaDev)
+        }
+    }, [])
     const [factura, setFactura] = useState(false)
     const HandleClickFactura = () => {
         setFactura(true)
@@ -12,19 +18,19 @@ export function Prestamo(props) {
         const today = new Date();
         const hours = today.getHours();
         const minutes = today.getMinutes();
-
-        // Formatear la hora y los minutos como una cadena en el formato deseado
         const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-
         return formattedTime;
     }
 
     const HandleClickDevuelto = async () => {
-        setActivo(funcion())
         await axios.put('/api/prestamos/[id]', {
             id: props.id,
             fecha: funcion()
         })
+        props.function(props.articulos)
+        setActivo(false)
+        setText(funcion())
+
     }
     const cerrar = () => {
         setFactura(false)
@@ -34,11 +40,11 @@ export function Prestamo(props) {
         <td className="lista2">{props.profesor}</td>
         <td className="lista2">{props.fecha}</td>
         <td className="lista2">{props.hora}</td>
-        <td className="lista2">{Activo}</td>
+        <td className="lista2">{text}</td>
         {Activo && (
-            <button onClick={() => HandleClickDevuelto()}>Devuelto</button>
+            <button className="btn-fact"onClick={() => HandleClickDevuelto()}>Devuelto</button>
         )}
-        <button onClick={() => HandleClickFactura()}>Factura</button>
+        <button onClick={() => HandleClickFactura()} className="btn-fact">Prestamo</button>
         {factura && (
             <Factura
                 profesor={props.profesor}

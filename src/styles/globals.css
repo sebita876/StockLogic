@@ -1400,3 +1400,18 @@ max-height: 90%;
 .close-button-cont:hover {
   background-image: url(../../public/cerrarhover.png);
 }
+
+.btn-fact{
+  margin-left: 5px;
+  margin-top: 6px;
+  background-color: #04846c;
+  color: #ffff;
+  border-radius: 70px;
+  width: 80px;
+  height: 20px;
+  cursor: pointer;
+  border:1px solid #002e34;
+}
+.btn-fact:hover{
+  background-color: #034639;
+}

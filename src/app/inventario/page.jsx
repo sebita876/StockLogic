@@ -41,6 +41,10 @@ export default function Inventario() {
   const [articulos, setArticulos] = useState([])
   const [isLoading, setIsLoading] = useState(true);
   let [listaArticulo, setListaArticulo] = useState([])
+  let [copiaListaArticulo, setCopiaListaArticulo] = useState([])
+  useEffect(() => {
+    setCopiaListaArticulo(listaArticulo)
+  }, [listaArticulo])
   const [busqueda, setBusqueda] = useState("")
   const [busquedaArt, setBusquedaArt] = useState("")
   const [select, setSelect] = useState([])
@@ -199,28 +203,28 @@ export default function Inventario() {
   //_______________________________________________PRESTAMOS_______________________________________________//
   const prueba = (fechaDev) => {
     if (fechaDev === undefined) {
-      return " -"
+      return true
     } else {
-      return fechaDev
+      return false
     }
   }
   const traerPrestamos = async () => {
     try {
       const res = await axios.get('/api/prestamos');
       const lista = res.data.datos;
-  
+
       const groupedById = {};
-  
+
       lista.forEach((dato) => {
         const { id, articulo, cantidad, profesor, curso, hora, usuario, fecha, fechaDev } = dato;
-  
+
         if (!groupedById[id]) {
           groupedById[id] = [];
         }
-  
+
         groupedById[id].push({ articulo, cantidad, profesor, curso, hora, usuario, fecha, fechaDev });
       });
-  
+
       const newComponents = Object.entries(groupedById).map(([id, elementos]) => (
         <Prestamo
           key={id}
@@ -232,9 +236,12 @@ export default function Inventario() {
           prestador={elementos[0].usuario}
           fecha={elementos[0].fecha}
           Activo={prueba(elementos[0].fechaDev)}
+          fechaDev={elementos[0].fechaDev}
+          function={devolverDisponible}
+          state={listaArticulo}
         />
       ));
-  
+
       setListaPrestamos([...listaPrestamos, ...newComponents]);
     } catch (error) {
       console.error('Error al obtener los prestamos:', error);
@@ -616,8 +623,53 @@ export default function Inventario() {
   const modo = () => {
     setTema(!tema)
   }
+  const devolverDisponible = (articulos) => {
+    setMostrarPrestamo(false);
+    const copia2 = [...listaArticulo];
+    const promises = articulos.map(async (elemento) => {
+      const index = copia2.findIndex((element) => element.props.nombre === elemento.articulo);
+      const copia = copia2[index];
+      const cant = copia.props.cantidad;
+      console.log(copia.props.disponible, "Disponible", elemento.cantidad, "Cantidad")
+      const nuevoDisponible = parseInt(copia.props.disponible);
+      console.log(nuevoDisponible)
+      // Realizar la operación PUT para actualizar los disponibles en la API
+      const response = await axios.put('/api/articulo/id', {
+        id: copia.props.id,
+        disponible: nuevoDisponible
+      });
+
+      // Crear el nuevo componente Articulo
+      const nuevoComponente = (
+        <Articulo
+          fecha={copia.props.fecha}
+          nombre={copia.props.nombre}
+          id={copia.props.id}
+          categoria={copia.props.categoria}
+          cantidad={parseInt(cant)}
+          disponible={nuevoDisponible}
+        />
+      );
+
+      copia2[index] = nuevoComponente;
+
+      return response.data; // Devolver los datos del registro de préstamo
+    });
+
+    Promise.all(promises)
+      .then(() => {
+        // Cuando todas las operaciones se completen, actualiza listaArticulo
+        setListaArticulo(copia2);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+
 
   const agregarPrestamo = () => {
+    setMostrarPrestamo(false)
     let id;
     const length = listaPrestamos.length;
 
@@ -629,7 +681,6 @@ export default function Inventario() {
       const props = objeto.props.id;
       id = parseInt(props) + 1;
     }
-    console.log(id)
     const profesor = document.getElementById("Prof").value;
     const curso = document.getElementById("Curso").value;
     const hora = document.getElementById("Hora").value;
@@ -653,8 +704,46 @@ export default function Inventario() {
         cantidad: elemento.cantidad,
         fecha: funcion(),
         id: id
-      })
-      );
+      }));
+      const copia2 = [...listaArticulo];
+      const promises = articulosPrestadosFiltrados.map(async (elemento) => {
+        const index = listaArticulo.findIndex((element) => element.props.nombre === elemento.articulo);
+        const copia = listaArticulo[index];
+
+        // Realizar la operación PUT para actualizar los disponibles en la API
+        const response = await axios.put('/api/articulo/id', {
+          id: copia.props.id,
+          disponible: copia.props.disponible - elemento.cantidad
+        });
+
+        const nuevaCant = copia.props.disponible;
+
+        // Crear el nuevo componente Articulo
+        const nuevoComponente = (
+          <Articulo
+            fecha={copia.props.fecha}
+            nombre={copia.props.nombre}
+            id={copia.props.id}
+            categoria={copia.props.categoria}
+            cantidad={copia.props.cantidad}
+            disponible={parseInt(nuevaCant) - elemento.cantidad}
+          />
+        );
+
+        copia2[index] = nuevoComponente;
+
+        return response.data; // Devolver los datos del registro de préstamo
+      });
+
+      Promise.all(promises)
+        .then(() => {
+          // Cuando todas las operaciones se completen, actualiza listaArticulo
+          setListaArticulo(copia2);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+
       const newComponent = <Prestamo
         profesor={profesor}
         hora={hora}
@@ -664,6 +753,8 @@ export default function Inventario() {
         id={id}
         articulos={articulosPrestadosFiltrados}
         Activo="-"
+        function={devolverDisponible}
+        state={listaArticulo}
       />
       setListaPrestamos([...listaPrestamos, newComponent])
       setArticulosPrestados([])
@@ -674,6 +765,8 @@ export default function Inventario() {
       console.log("error");
     }
   }
+
+
   const eliminarSelect = async (key) => {
     const index = listaSelect.findIndex((element) => element.props.id == key);
     const copi = [...listaSelect];
